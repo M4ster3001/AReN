@@ -1,12 +1,15 @@
 import React from 'react';
 
-import { FooterArea } from './styled.js';
+import './styles.css';
 
 export default function Footer() {
 
     return ( 
-        <FooterArea>
-        </FooterArea>
+        <div className="container">
+            <div className="container-footer">
+                
+            </div>
+        </div>
     );
 
 };

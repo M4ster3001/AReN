@@ -9,6 +9,74 @@
 
 body {
     font: 400 14px Roboto, sans-serif;
-    background-color: #FFF;
+    background-color: #EEE;
     -webkit-font-smothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+form input:not([type='checkbox']) {
+    width: 100%;
+    height: 40px;
+    color: #333;
+    border: 1px solid #dcdce6;
+    border-radius: 8px;
+    padding: 0 24px;
+    outline: 0;
+    transition: all ease 0.5s;
+}
+
+form input[type='checkbox'] {
+    width: 30px;
+    height: 30px;
+    color: #333;
+    border: 1px solid #dcdce6;
+    border-radius: 10px;
+    padding: 0 24px;
+    outline: 0;
+    transition: all ease 0.5s;
+    cursor: pointer;
+}
+
+form input:focus {
+    border: #59bfff solid 1px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.btn {
+    width: 100%;
+    max-width: 100px;
+    height: 40px;
+    background-color: #333;
+    border: 0;
+    border-radius: 5px;
+    color: #FFF;
+    font-weight: 700;
+    margin-top: 16px;
+    display: inline-block !important;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    line-height: 40px;  
+    transition: all ease 0.5s; 
+}
+
+.btn:hover{
+    filter: brightness( 90% );
+}
+
+.btn.btn-success {
+    background-color: #0089FF !important;
+    opacity: 0.8;
 }

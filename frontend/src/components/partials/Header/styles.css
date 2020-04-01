@@ -1,0 +1,65 @@
+    .header-body {
+        height: 60px;
+        display: flex;
+        background-color: #b4baed;
+        padding: 0 10px;
+    }
+
+    .logo {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        height: 60px;
+    }
+
+    .logo-1, .logo-2, .logo-3 {
+        font-size: 27px;
+        font-weight: bold;
+    }
+
+    .logo-1 { color: #FF0000; }
+    .logo-2 { color: #00FF00; }
+    .logo-3 { color: #0000FF; }
+
+    .sidebar {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    
+    ul, li {
+        margin: 0;
+        padding: 0;
+        list-style:none;
+    }
+
+    ul {
+        display:flex;
+        align-items: center;
+        height: 40px;
+    }
+
+    li {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    a {
+        color: #000;
+        font-size: 14px;
+        transition: 0.5s;               
+    }
+    
+    a:hover {
+        color: #999;
+    }
+
+    .button {
+        background-color: #FF8100;
+        border-radius: 4px;
+        color: #FFF;
+        padding: 5px 10px;
+    }
+    
+    .button:hover {
+        background-color: #E57706;
+    }
