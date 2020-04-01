@@ -80,3 +80,13 @@ button {
     background-color: #0089FF !important;
     opacity: 0.8;
 }
+
+.error-message {
+    font-size: 25px;
+    font-weight: 400;
+    margin: 10px 0;
+    padding: 5px;
+    background-color: #f74640;
+    border: 2px solid #CCC;
+    text-align: center;
+}
