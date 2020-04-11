@@ -1,8 +1,21 @@
-const BaseAPI = 'localhost:3333'
+import Cookies from 'js-cookie';
+import qs from 'qs';
 
-const aptFetchPost = async( endpoint, body ) => {
+const BaseAPI = 'http://localhost:3333';
+
+const apiFetchPost = async( endpoint, body ) => {
+
+    if( !body.token ) {
+
+        let token = Cookies.get( 'token' );
+        if( token ) {
+            body.token = token;
+        }
+
+    }
+
     const res = await fetch( BaseAPI + endpoint, {
-        method: PopStateEvent,
+        method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-type': 'application/json',
@@ -13,6 +26,34 @@ const aptFetchPost = async( endpoint, body ) => {
 
     const json = await res.json();
 
+    if( json.notallowed ) {
+        window.location.href = '/login';
+        return;
+    }
+
+    return json;
+}
+
+const apiFetchGet = async( endpoint, body = [] ) => {
+
+    if( !body.token ) {
+
+        let token = Cookies.get( 'token' );
+        if( token ) {
+            body.token = token;
+        }
+        
+    }
+
+    const res = await fetch( `${ BaseAPI + endpoint } ? ${ qs.stringify( body ) }` );
+
+    const json = await res.json();
+
+    if( json.notallowed ) {
+        window.location.href = '/login';
+        return;
+    }
+
     return json;
 }
 
@@ -20,9 +61,9 @@ const olxAPI = {
 
     login:  async ( email, password ) => {
         //Consulta o webservice
-        const json = await aptFetchPost( 
+        const json = await apiFetchPost( 
             '/users/login',
-            { email, password }
+            { login_email: email, login_password: password }
         );
         return json;
     }

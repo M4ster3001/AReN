@@ -3,11 +3,18 @@ import { Link } from 'react-router-dom';
 
 import './styles.css';
 
-import { isLogged } from '../../../helpers/authHandler';
+import { isLogged, doLogout } from '../../../helpers/authHandler';
 
 export default function Header() {
 
     let logged = isLogged();
+
+    const handleLogout = () => {
+
+        doLogout();
+        window.location.href = '/';
+
+    }    
 
     return ( 
         <div className="container">
@@ -27,7 +34,7 @@ export default function Header() {
                                     <Link to="/my-account">Minha conta</Link>
                                 </li>
                                 <li>
-                                    <Link to="/logout">Logout</Link>
+                                    <button className="nobutton" onClick={ handleLogout } >Sair</button>
                                 </li>
                                 <li>
                                     <Link to="/newad" className="button" >Poste um anuncio</Link>

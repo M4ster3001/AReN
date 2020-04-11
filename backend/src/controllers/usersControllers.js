@@ -3,6 +3,31 @@ const crypto = require( 'crypto' );
 
 module.exports = {
 
+    async login( request, response ){
+        
+        const { login_email, login_password } = request.body;
+
+        if( !login_email || !login_password ) {
+            return response.json({ error: 'Ocorreu um problema ao logar, tente novamente' });
+        }
+        
+        try { 
+
+            const login = await connection( 'users' ).where({ email: login_email, password: login_password }).select( 'id' ).first();
+
+            if( !login ) {
+                return response.json({ error: 'Login ou senha inválidos' });
+            }
+
+            const token = crypto.randomBytes( 10 ).toString( 'HEX' );
+            return response.json({ token: token });
+
+        } catch( er ) {
+            return response.json( er );
+        }
+
+    }, 
+    
     async index( request, response ) {
 
         const users = await connection( 'users' ).select( '*' );
@@ -24,6 +49,10 @@ module.exports = {
         });
 
         return response.json( resp )
+    },
+
+    async update() {
+
     },
 
     async delete( request, response ) {

@@ -19,15 +19,21 @@ export default function Login() {
     async function handleLogar( e ) {
         e.preventDefault();
         setDisabled( true );
-
-        const json = await api.login( email, password );
-        if( json.error ) {
-            setError( json.error );
-        } else {
-            doLogin( json.token, flg_logado );
-            window.location.href = '/';
+        
+        try {
+            const json = await api.login( email, password );
+            if( json.error ) {
+                setError( json.error );
+            } else {
+                doLogin( json.token, flg_logado );
+                window.location.href = '/';
+            }
+        } catch ( er ) {
+            alert( 'Erro: ' + er );
+            
         }
-
+        
+        setDisabled( false );
     }
 
     return (

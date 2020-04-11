@@ -17,8 +17,8 @@
         font-weight: bold;
     }
 
-    .logo-1 { color: #FF0000; }
-    .logo-2 { color: #00FF00; }
+    .logo-1 { color: #FF0000; top: -2px; position: relative; }
+    .logo-2 { color: #00FF00; top: -5px; position: relative; }
     .logo-3 { color: #0000FF; }
 
     .sidebar {
@@ -43,13 +43,14 @@
         margin-right: 20px;
     }
 
-    a {
+    a, .nobutton {
         color: #000;
         font-size: 14px;
-        transition: 0.5s;               
+        transition: 0.5s;
+        outline: 0;               
     }
     
-    a:hover {
+    a:hover, .nobutton:hover {
         color: #999;
     }
 
@@ -62,4 +63,9 @@
     
     .button:hover {
         background-color: #E57706;
+    }
+
+    .nobutton {
+        border: 0;
+        background-color: transparent;
     }
