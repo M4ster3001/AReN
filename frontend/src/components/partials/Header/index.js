@@ -48,7 +48,7 @@ export default function Header() {
                                     <Link to="/login">Login</Link>
                                 </li>
                                 <li>
-                                    <Link to="/signout">Cadastrar</Link>
+                                    <Link to="/register">Cadastrar</Link>
                                 </li>
                             </>
                             

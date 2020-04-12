@@ -1,0 +1,56 @@
+.home-header {
+    font-size: 27px;
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+
+.home-body {
+    width: 100%;
+    background-color: #FFF;
+    border-radius: 3px;
+    padding: 10px;
+    box-shadow: 0 0 3px #999;
+    margin: 0 5px ;
+    display: flex;
+}
+
+.container-search {
+    width: 100%;
+    background-color: #DDD;
+    border-bottom: 1px solid #CCC;
+    padding: 20px 0;
+}
+
+.container-search .home-search {
+    width: 100%;
+    background-color: #9BB83C;
+    padding: 20px 15px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px 0.3px rgba( 0, 0, 0, 0.2 );
+    display: flex;
+}
+
+form {
+    display: flex;
+    width: 1200px !important;  
+}
+
+form input, form select {
+    display: initial;
+    margin-right: 5px;
+    font-size: 15px;
+}
+
+form input {
+    flex: 1;
+}
+
+form select {
+    width: 100px !important;
+}
+
+form .btn {
+    margin-top: 0 !important;
+}
+

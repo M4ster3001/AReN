@@ -45,7 +45,7 @@ const apiFetchGet = async( endpoint, body = [] ) => {
         
     }
 
-    const res = await fetch( `${ BaseAPI + endpoint } ? ${ qs.stringify( body ) }` );
+    const res = await fetch( `${ BaseAPI + endpoint }?${ qs.stringify( body ) }` );
 
     const json = await res.json();
 
@@ -64,6 +64,21 @@ const olxAPI = {
         const json = await apiFetchPost( 
             '/users/login',
             { login_email: email, login_password: password }
+        );
+        return json;
+    },
+
+    getStates: async () => {
+        const json = await apiFetchGet(
+            '/states'
+        );
+        return json;
+    },
+
+    register: async( name, stateLoc, email, password ) => {
+        const json = await apiFetchPost(
+            '/users/register',
+            { name, idState: stateLoc, email, password }
         );
         return json;
     }

@@ -19,6 +19,7 @@ export default function Login() {
     async function handleLogar( e ) {
         e.preventDefault();
         setDisabled( true );
+        setError( '' );
         
         try {
             const json = await api.login( email, password );
