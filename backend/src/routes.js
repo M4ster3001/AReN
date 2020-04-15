@@ -6,6 +6,7 @@ const routes = express.Router();
 const usersControllers = require( './controllers/usersControllers' );
 const statesControllers = require( './controllers/statesControllers' );
 const adsControllers = require( './controllers/adsControllers' );
+const categoriesControllers = require( './controllers/categoriesControllers' );
 
 /* Routes */
 //Users 
@@ -14,11 +15,15 @@ routes.post( '/users/login', usersControllers.login );
 routes.post( '/users/register', usersControllers.create );
 routes.delete( '/users/delete', usersControllers.delete );
 
-//Anuncios
+//Ads
 routes.get( '/ads', adsControllers.index );
 
-//Estatos
+//States
 routes.get( '/states', statesControllers.index );
 routes.post( '/states/register', statesControllers.create );
+
+//Categories
+routes.get( '/categories', categoriesControllers.index );
+routes.post( '/categories/register', categoriesControllers.create );
 
 module.exports = routes;

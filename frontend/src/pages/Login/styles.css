@@ -10,12 +10,13 @@
     border-radius: 3px;
     padding: 10px;
     box-shadow: 0 0 3px #999;
-    margin: 0 5px ;
+    margin: 0 0px ;
     display: flex;
 }
 
 form {
     width: 600px;
+    display: initial;
 }
 
 .logo-img {

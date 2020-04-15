@@ -6,8 +6,8 @@ export default function Footer() {
 
     return ( 
         <div className="container">
-            <div className="container-footer">
-                
+            <div className="footer">
+                <label htmlFor="" className="label-copyright"> COPYRIGHT { new Date().getFullYear() }</label>              
             </div>
         </div>
     );
