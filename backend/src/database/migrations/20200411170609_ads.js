@@ -5,9 +5,11 @@ exports.up = function(knex) {
 
         table.increments( 'idAd' );
         table.integer( 'idUser' ).notNullable();
+        table.integer( 'idCategory' ).notNullable();
         table.string( 'description' ).notNullable();
         table.string( 'title' ).notNullable();
         table.string( 'resume' ).notNullable();
+        table.string( 'imgAd' ).notNullable();
         table.double( 'value' );
         table.integer( 'flg_ativo' );
 
@@ -15,6 +17,7 @@ exports.up = function(knex) {
         table.timestamp('updatedAt');
 
     } );
+
   
 };
 

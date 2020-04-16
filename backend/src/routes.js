@@ -17,6 +17,8 @@ routes.delete( '/users/delete', usersControllers.delete );
 
 //Ads
 routes.get( '/ads', adsControllers.index );
+routes.post( '/ad/register', adsControllers.create );
+routes.get( '/ad/list', adsControllers.index );
 
 //States
 routes.get( '/states', statesControllers.index );
@@ -25,5 +27,6 @@ routes.post( '/states/register', statesControllers.create );
 //Categories
 routes.get( '/categories', categoriesControllers.index );
 routes.post( '/categories/register', categoriesControllers.create );
+routes.put( '/categories/update', categoriesControllers.update );
 
 module.exports = routes;

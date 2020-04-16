@@ -13,17 +13,42 @@ module.exports =
     async create( request, response ) {
 
         const { nameCategory, slugCategory, imgCategory } = request.body;
-        const resp = await connection( 'categories' ).insert({
-            nameCategory,
-            slugCategory,
-            imgCategory,
-        });
+        let resp; 
+
+        try {
+
+            resp = await connection( 'categories' ).insert({
+                nameCategory,
+                slugCategory,
+                imgCategory,
+            });
+
+        } catch( er ) {
+            return response.json( er );
+        }
 
         return response.json( resp );
 
     },
 
     async update( request, response ) {
+
+        const { idCategory, nameCategory, imgCategory, slugCategory } = request.body;
+        let resp; 
+        
+        try {
+
+            resp = await connection( 'categories' ).where( "idCategory", idCategory ).update({
+                nameCategory,
+                slugCategory,
+                imgCategory,
+            });
+
+        } catch( er ) {
+            return response.json( er );
+        }
+
+        return response.json( resp );
 
     },
 
