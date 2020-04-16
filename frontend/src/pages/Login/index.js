@@ -4,7 +4,7 @@ import { doLogin } from '../../helpers/authHandler';
 
 import './styles.css';
 
-import logoImg from '../../img/logo.jpg'
+import logoImg from '../../assets/img/logo.jpg';
 
 export default function Login() {
 

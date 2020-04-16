@@ -38,3 +38,16 @@
     margin-top: 0 !important;
 }
 
+.container-categorys .body img {
+    width: 50px;
+    height: 50px;
+}
+
+.container-categorys .body a {
+    margin: 10px;
+}
+
+.container-categorys .body a span {
+    margin: 10px;
+}
+

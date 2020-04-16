@@ -8,7 +8,7 @@ export default function Login() {
 
     const api = useAPI();
     
-    const PATH = 'http://localhost:3333/assets/img/';
+    const PATH_IMG = 'http://localhost:3000/assets/img/';
 
     const [ stateList, setStateList ] = useState( [] );
     const [ categories, setCategories ] = useState( [] );
@@ -54,15 +54,14 @@ export default function Login() {
                     </div>
                 </div>        
             </div>
-
             <div className="container container-categorys">
                 <div className="header"></div>
                 <div className="body">                                        
                     { categories.map( ( i, k ) => 
-                            <Link key={ k } to="" className="categoryItem">
-                                <img src= { PATH+i.imgCategory } alt="" />
-                                <span>{ i.nameCategory }</span>
-                            </Link>
+                        <Link key={ k } to={`/ads?cat=${ i.slug }`} className="categoryItem">                                
+                            <img src={ PATH_IMG + i.imgCategory } alt="" />
+                            <span>{ i.nameCategory }</span>
+                        </Link>
                     )}
                 </div>       
             </div>
