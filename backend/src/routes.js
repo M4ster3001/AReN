@@ -17,8 +17,10 @@ routes.delete( '/users/delete', usersControllers.delete );
 
 //Ads
 routes.get( '/ads', adsControllers.index );
-routes.post( '/ad/register', adsControllers.create );
 routes.get( '/ad/list', adsControllers.index );
+routes.get( '/ad/:id', adsControllers.index );
+routes.post( '/ad/register', adsControllers.create );
+routes.put( '/ad/update', adsControllers.update );
 
 //States
 routes.get( '/states', statesControllers.index );

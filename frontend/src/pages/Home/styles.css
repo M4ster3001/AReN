@@ -85,6 +85,10 @@
     width: 100%;
 }
 
+.container-recents .body .list .aditem {
+    width: 25%;
+}
+
 .container-recents .body .seeAllLinks {
     color: #000;
     text-decoration: none;
