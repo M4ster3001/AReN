@@ -1,20 +1,38 @@
 const connection = require( '../database/connection' );
+const PATH_ADS = 'http://localhost:3000/assets/img/';
 
 module.exports = 
 {
 
     async index( request, response ) {
-
-        const { order = 'asc', limit = -1, flg_ativo = 1, idAd = null } = request.query;
+        
+        const { order = 'asc', limit = -1, flg_ativo = 1, idAd = null, others } = request.query;
+        
+        let data = [];
         let query = '';
+        let query_others = '';
         
         if( idAd ){
+
             query = await connection( 'ads' ).where( 'idAd', idAd ).select( '*' );
+            //query[0].imgAd = PATH_ADS + query[0].imgAd;
+            
+            gallery = await connection( 'images_gallery' ).where( 'idAd', idAd ).select( 'imgAd' );
+            query[0].gallery = gallery;
+            gallery.push({ 'imgAd': query[0].imgAd });
+
+            if( others ) {
+                query_others = await connection( 'ads' ).where({ 'idUser': query[0].idUser, 'flg_ativo': 1 }).select( '*' );
+            }
+
+            data = { ad: query, others: query_others };
+
         } else {         
             query = await connection( 'ads' ).where( 'flg_ativo', flg_ativo ).select( '*' ).orderBy( 'createdAt', order ).limit( limit );
+            data = query;
         }
 
-        return response.json( query );
+        return response.json( data );
 
     },
 

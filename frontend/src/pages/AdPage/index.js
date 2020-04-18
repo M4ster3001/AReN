@@ -1,43 +1,85 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import useApi from '../../helpers/olxAPI';
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import useApi from '../../helpers/olxAPI'
+// eslint-disable-next-line no-unused-vars
+import { Slide } from 'react-slideshow-image'
+import { formatDate } from '../../helpers/format.js'
 
-import './styles.css';
+import Loading from '../../components/partials/Loading'
 
-export default function AdPage( request ) {
+import './styles.css'
 
-    const { idAd } = useParams();
-    const api = useApi();
+export default function AdPage (request) {
+  const { idAd } = useParams()
+  const api = useApi()
 
-    const [ loading, setLoading ] = useState( true );
-    const [ adInfo, setAdInfo ] = useState( [] );
+  const PATH_ADS = 'http://localhost:3000/assets/img/'
 
-    return ( 
-    <div className="container">
-        <div className="header">Titulo</div> 
-        <div className="body">
+  const [loading, setLoading] = useState(true)
+  const [adInfo, setAdInfo] = useState({})
 
-            <div className="leftSide">
-                <div className="box">
-                    <div className="imgAd">
+  useEffect(() => {
+    const getAdInfo = async (idAd) => {
+      const json = await api.getAd(idAd, true)
+      const ad = json.ad[0]
 
+      setAdInfo(ad)
+      setLoading(false)
+    }
+    getAdInfo(idAd)
+  }, [])
+
+  return (
+    <div className="container container-adpage">
+      <div className="header">
+        { loading && <Loading height={ 20 } /> }
+        { adInfo.title && adInfo.title }
+      </div>
+      <div className="body">
+
+        <div className="leftSide">
+          <div className="box">
+            <div className="imgAd">
+              { loading && <Loading height={ 300 } /> }
+              { adInfo.gallery &&
+                <Slide>
+                  { adInfo.gallery.map((img, k) =>
+                    <div key={ k } className="each-slide" >
+                      <img src={ PATH_ADS + img.imgAd } alt="" />
                     </div>
-                    <div className="infoAd">
-                        <div className="nameAd">
-
-                        </div>
-                        <div className="descriptionAd">
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="rightSide">
+                  ) }
+                </Slide>
+              }
 
             </div>
+            <div className="infoAd">
+              <div className="createdAt">
+                { loading && <Loading height={ 20 } /> }
+                            Criado em { adInfo.createdAt && formatDate(adInfo.createdAt) }
+              </div>
+              <hr />
+              <br />
+              <div className="descriptionAd">
+                { loading && <Loading height={ 100 } /> }
+                <p>Descrição</p>
+                <p>{ adInfo.description && adInfo.description }</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        </div> 
-    </div> 
-    );
+        <div className="rightSide">
+          <div className="box box-padding">
+            { loading && <Loading height={ 20 } /> }
+          </div>
+          <div className="box box-padding">
+            { loading && <Loading height={ 20 } /> }
+            { adInfo.value && 'R$ ' + adInfo.value.toFixed(2) }
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
 }

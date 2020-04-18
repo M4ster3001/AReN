@@ -7,6 +7,7 @@ const usersControllers = require( './controllers/usersControllers' );
 const statesControllers = require( './controllers/statesControllers' );
 const adsControllers = require( './controllers/adsControllers' );
 const categoriesControllers = require( './controllers/categoriesControllers' );
+const galleryControllers = require( './controllers/galleryControllers' );
 
 /* Routes */
 //Users 
@@ -21,6 +22,12 @@ routes.get( '/ad/list', adsControllers.index );
 routes.get( '/ad/:id', adsControllers.index );
 routes.post( '/ad/register', adsControllers.create );
 routes.put( '/ad/update', adsControllers.update );
+
+//Gallery
+routes.get( '/ad/gallery/list', galleryControllers.index );
+routes.get( '/ad/gallery/:id', galleryControllers.index );
+routes.post( '/ad/gallery/register', galleryControllers.create );
+routes.put( '/ad/gallery/update', galleryControllers.update );
 
 //States
 routes.get( '/states', statesControllers.index );

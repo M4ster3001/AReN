@@ -1,0 +1,48 @@
+.container-adpage .body {
+    display: flex;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+
+.container-adpage .box {
+    background-color: #FFF;
+    border-radius: 5px;
+    box-shadow: 0px 0px 4px #999;
+    margin-bottom: 20px;
+}
+
+.container-adpage .leftSide {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.container-adpage .leftSide .imgAd {
+    width: 950px;
+    height: 500px;
+}
+
+.container-adpage .leftSide .imgAd img {
+    max-width: 900px;
+    height: 500px;
+}
+
+.container-adpage .leftSide .imgAd .each-slide {
+    text-align: center;
+}
+
+.container-adpage .leftSide .infoAd {
+    padding: 10px;
+}
+
+.container-adpage .leftSide .nameAd {
+    margin-bottom: 20px;
+}
+
+.container-adpage .leftSide .descriptionAd {
+
+}
+
+.container-adpage .rightSide {
+    width: 250px;
+}
