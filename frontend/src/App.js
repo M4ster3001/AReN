@@ -1,37 +1,37 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from 'react'
+import { connect } from 'react-redux'
 
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom'
 
-import { Template } from './components/MainComponents';
+import { Template } from './components/MainComponents'
 
-import Header from './components/partials/Header';
-import Footer from './components/partials/Footer';
+import Header from './components/partials/Header'
+import Footer from './components/partials/Footer'
 
-import Routes from './Routes';
+import Routes from './Routes'
 
-import './global.css';
+import './global.css'
 
-const Page = ( props ) => {
-    return( 
-        <BrowserRouter>
-            <Template>
-                <Header />
+const Page = (props) => {
+  return (
+    <BrowserRouter>
+      <Template>
+        <Header />
 
-                <Routes />
+        <Routes />
 
-                <Footer />
-            </Template>
-        </BrowserRouter>
-     ); 
+        <Footer />
+      </Template>
+    </BrowserRouter>
+  )
 }
 
-const mapStateToProps = ( state ) => {
-    return { user: state.user };
+const mapStateToProps = (state) => {
+  return { user: state.user }
 }
 
-const mapDispatchToProps = ( dispatch ) => {
-    return {};
+const mapDispatchToProps = (dispatch) => {
+  return {}
 }
 
-export default connect( mapStateToProps, mapDispatchToProps )( Page );
+export default connect(mapStateToProps, mapDispatchToProps)(Page)

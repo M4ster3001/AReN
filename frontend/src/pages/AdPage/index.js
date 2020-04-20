@@ -37,7 +37,6 @@ export default function AdPage (request) {
         { adInfo.title && adInfo.title }
       </div>
       <div className="body">
-
         <div className="leftSide">
           <div className="box">
             <div className="imgAd">
@@ -54,7 +53,7 @@ export default function AdPage (request) {
 
             </div>
             <div className="infoAd">
-              <div className="createdAt">
+              <div className="createdAt help-block">
                 { loading && <Loading height={ 20 } /> }
                             Criado em { adInfo.createdAt && formatDate(adInfo.createdAt) }
               </div>
@@ -62,7 +61,7 @@ export default function AdPage (request) {
               <br />
               <div className="descriptionAd">
                 { loading && <Loading height={ 100 } /> }
-                <p>Descrição</p>
+                <p className="title">Descrição</p>
                 <p>{ adInfo.description && adInfo.description }</p>
               </div>
             </div>
@@ -70,13 +69,18 @@ export default function AdPage (request) {
         </div>
 
         <div className="rightSide">
-          <div className="box box-padding">
+          <div className="box box-padding box-price">
             { loading && <Loading height={ 20 } /> }
+            Preço: { adInfo.value && 'R$ ' + adInfo.value.toFixed(2) }
           </div>
-          <div className="box box-padding">
-            { loading && <Loading height={ 20 } /> }
-            { adInfo.value && 'R$ ' + adInfo.value.toFixed(2) }
-          </div>
+          { loading && <Loading height={ 20 } /> }
+          { adInfo.userInfo &&
+            <>
+              <a href={`mailto:${adInfo.userInfo.email}`} rel="noopener noreferrer" target="_blank" className="contactSellerLink" > Contate o vendedor </a>
+              <div className="box box-padding">
+              </div>
+            </>
+          }
         </div>
 
       </div>

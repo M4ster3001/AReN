@@ -15,7 +15,8 @@ module.exports =
         if( idAd ){
 
             query = await connection( 'ads' ).where( 'idAd', idAd ).select( '*' );
-            //query[0].imgAd = PATH_ADS + query[0].imgAd;
+            info_user = await connection( 'users' ).where( 'idUser', query[0].idUser ).select( 'email' );
+            query[0].userInfo = info_user[0];
             
             gallery = await connection( 'images_gallery' ).where( 'idAd', idAd ).select( 'imgAd' );
             query[0].gallery = gallery;

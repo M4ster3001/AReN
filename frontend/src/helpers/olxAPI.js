@@ -1,112 +1,106 @@
-import Cookies from 'js-cookie';
-import qs from 'qs';
+/* eslint-disable no-undef */
+import Cookies from 'js-cookie'
+import qs from 'qs'
 
-const BaseAPI = 'http://localhost:3333';
+const BaseAPI = 'http://localhost:3333'
 
-const apiFetchPost = async( endpoint, body ) => {
-
-    if( !body.token ) {
-
-        let token = Cookies.get( 'token' );
-        if( token ) {
-            body.token = token;
-        }
-
+const apiFetchPost = async (endpoint, body) => {
+  if (!body.token) {
+    const token = Cookies.get('token')
+    if (token) {
+      body.token = token
     }
+  }
 
-    const res = await fetch( BaseAPI + endpoint, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-type': 'application/json',
-        },
-        body: JSON.stringify( body ),
-        
-    } );
+  const res = await fetch(BaseAPI + endpoint, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(body)
 
-    const json = await res.json();
+  })
 
-    if( json.notallowed ) {
-        window.location.href = '/login';
-        return;
-    }
+  const json = await res.json()
 
-    return json;
+  if (json.notallowed) {
+    window.location.href = '/login'
+    return
+  }
+
+  return json
 }
 
-const apiFetchGet = async( endpoint, body = [] ) => {
-
-    if( !body.token ) {
-
-        let token = Cookies.get( 'token' );
-        if( token ) {
-            body.token = token;
-        }
-        
+const apiFetchGet = async (endpoint, body = []) => {
+  if (!body.token) {
+    const token = Cookies.get('token')
+    if (token) {
+      body.token = token
     }
+  }
 
-    const res = await fetch( `${ BaseAPI + endpoint }?${ qs.stringify( body ) }` );
+  const res = await fetch(`${BaseAPI + endpoint}?${qs.stringify(body)}`)
 
-    const json = await res.json();
+  const json = await res.json()
 
-    if( json.notallowed ) {
-        window.location.href = '/login';
-        return;
-    }
+  if (json.notallowed) {
+    window.location.href = '/login'
+    return
+  }
 
-    return json;
+  return json
 }
 
 const olxAPI = {
 
-    login:  async ( email, password ) => {
-        //Consulta o webservice
-        const json = await apiFetchPost( 
-            '/users/login',
-            { login_email: email, login_password: password }
-        );
-        return json;
-    },
+  login: async (email, password) => {
+    // Consulta o webservice
+    const json = await apiFetchPost(
+      '/users/login',
+      { login_email: email, login_password: password }
+    )
+    return json
+  },
 
-    getStates: async () => {
-        const json = await apiFetchGet(
-            '/states'
-        );
-        return json;
-    },
+  getStates: async () => {
+    const json = await apiFetchGet(
+      '/states'
+    )
+    return json
+  },
 
-    register: async( name, stateLoc, email, password ) => {
-        const json = await apiFetchPost(
-            '/users/register',
-            { name, idState: stateLoc, email, password }
-        );
-        return json;
-    },
+  register: async (name, stateLoc, email, password) => {
+    const json = await apiFetchPost(
+      '/users/register',
+      { name, idState: stateLoc, email, password }
+    )
+    return json
+  },
 
-    
-    getCategories: async () => {
-        const json = await apiFetchGet(
-            '/categories'
-        );
-        return json;
-    },
+  getCategories: async () => {
+    const json = await apiFetchGet(
+      '/categories'
+    )
+    return json
+  },
 
-    getAds:  async( options ) => {
-        const json = await apiFetchGet(
-            '/ad/list',
-            options
-        );
-        return json;
-    },
+  getAds: async (options) => {
+    const json = await apiFetchGet(
+      '/ad/list',
+      options
+    )
+    return json
+  },
 
-    getAd:  async( id, moreAds = false ) => {
-        const json = await apiFetchGet(
-            '/ad/:id',
-            { idAd: id, others: moreAds }
-        );
-        return json;
-    }
+  getAd: async (id, moreAds = false) => {
+    const json = await apiFetchGet(
+      '/ad/:id',
+      { idAd: id, others: moreAds }
+    )
+    return json
+  }
 
-};
+}
 
-export default () => olxAPI;
+export default () => olxAPI
