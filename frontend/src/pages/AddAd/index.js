@@ -93,7 +93,7 @@ export default function AddAd () {
       }
       <div className="body">
 
-        <form className="form-noimg form-cadastro" onSubmit={ handleSubmit }>
+        <form className="form-noimg form-cadastro" enctype="multipart/form-data" onSubmit={ handleSubmit }>
 
           <label htmlFor="" className="area">
             <div className="area--title">Título</div>

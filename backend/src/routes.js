@@ -1,43 +1,64 @@
-const express = require( 'express' );
-const routes = express.Router();
+import { Router } from 'express';
+require( 'dotenv' ).config({ path: 'variables.env' });
 
-const multer = require( 'multer' );
-const upload = multer({ dest: 'upload/' });
+const routes = Router();
+
+import multer from 'multer';
+let storage = multer.diskStorage({
+    destination: function( req, file, callback ) {
+        callback( null, './uploads' )
+    },
+    filename: function( req, file, callback ) {
+        callback( null, file.fieldname + '-' + Date.now() )
+    }
+})
+
+let upload = multer({ storage: storage }).array( 'img', 10)
 
 //Controllers
-const usersControllers = require( './controllers/usersControllers' );
-const statesControllers = require( './controllers/statesControllers' );
-const adsControllers = require( './controllers/adsControllers' );
-const categoriesControllers = require( './controllers/categoriesControllers' );
-const galleryControllers = require( './controllers/galleryControllers' );
+import { index, login, create, remove } from './controllers/usersControllers';
+import { index as _index, create as _create } from './controllers/statesControllers';
+import { index as __index, create as __create, update } from './controllers/adsControllers';
+import { index as ___index, create as ___create, update as _update } from './controllers/categoriesControllers';
+import { index as ____index, create as ____create, update as __update } from './controllers/galleryControllers';
 
 /* Routes */
 //Users 
-routes.get( '/users', usersControllers.index );
-routes.post( '/users/login', usersControllers.login );
-routes.post( '/users/register', usersControllers.create );
-routes.delete( '/users/delete', usersControllers.delete );
+routes.get( '/users', index );
+routes.post( '/users/login', login );
+routes.post( '/users/register', create );
+routes.delete( '/users/delete', remove );
 
 //Ads
-routes.get( '/ads', adsControllers.index );
-routes.get( '/ad/list', adsControllers.index );
-routes.get( '/ad/view', adsControllers.index );
-routes.post( '/ad/register', upload.single( 'img' ), adsControllers.create);
-routes.put( '/ad/update', adsControllers.update );
+routes.get( '/ads', __index );
+routes.get( '/ad/list', __index );
+routes.get( '/ad/view', __index );
+routes.post( '/ad/register', function( req, res ) {
+    upload( req, res, function( err ) {
+        console.log( req.body )
+        console.log( req.files )
+
+        if( err ) {
+            return res.send( 'Erro uploading' )
+        }
+        res.end( 'File success' )
+    } )
+});
+routes.put( '/ad/update', update );
 
 //Gallery
-routes.get( '/ad/gallery/list', galleryControllers.index );
-routes.get( '/ad/gallery', galleryControllers.index );
-routes.post( '/ad/gallery/register', galleryControllers.create );
-routes.put( '/ad/gallery/update', galleryControllers.update );
+routes.get( '/ad/gallery/list', ____index );
+routes.get( '/ad/gallery', ____index );
+routes.post( '/ad/gallery/register', ____create );
+routes.put( '/ad/gallery/update', __update );
 
 //States
-routes.get( '/states', statesControllers.index );
-routes.post( '/states/register', statesControllers.create );
+routes.get( '/states', _index );
+routes.post( '/states/register', _create );
 
 //Categories
-routes.get( '/categories', categoriesControllers.index );
-routes.post( '/categories/register', categoriesControllers.create );
-routes.put( '/categories/update', categoriesControllers.update );
+routes.get( '/categories', ___index );
+routes.post( '/categories/register', ___create );
+routes.put( '/categories/update', _update );
 
-module.exports = routes;
+export default routes;

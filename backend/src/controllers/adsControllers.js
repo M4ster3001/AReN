@@ -115,7 +115,9 @@ module.exports =
 
     async create( request, response ) {
 
+        console.log( request );
         const { idCategory, description, title, resume, imgAd, price, flg_ativo = 1, token } = request.body;
+        let { images } = request.file; 
         const info_user = await conController.select({
             'table': 'users',
             'data': {
@@ -124,7 +126,8 @@ module.exports =
             'select': 'idUser',
             'limit': 1
         })
-        let resp;
+
+        console.log( images );
         console.log( 'Cat: '+ idCategory );
         console.log( 'desc: '+ description );
         console.log( 'title: '+ title );
@@ -145,7 +148,7 @@ module.exports =
         })*/
 
         
-        return response.json( query );
+        //return response.json( query );
 
     },
 

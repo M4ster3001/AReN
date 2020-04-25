@@ -1,6 +1,6 @@
-const connection = require( '../database/connection' );
-const crypto = require( 'crypto' );
-const bCrypt = require( 'bcrypt' );
+import { connection } from '../database/connection';
+import { crypto } from  'crypto';
+import { bCrypt } from  'bcrypt';
 const salts = 12;
 
 module.exports = {
@@ -75,7 +75,7 @@ module.exports = {
 
     },
 
-    async delete( request, response ) {
+    async remove( request, response ) {
 
         const { idUser } = request.query;
         const user_id = await connection( 'users' ).where( 'idUser', idUser ).select( 'idUser' ).first();
