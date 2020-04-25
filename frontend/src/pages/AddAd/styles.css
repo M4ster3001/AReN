@@ -1,0 +1,68 @@
+.signin-header {
+    font-size: 27px;
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+
+.signin-body {
+    background-color: #FFF;
+    border-radius: 3px;
+    padding: 10px;
+    box-shadow: 0 0 3px #999;
+    margin: 0 5px ;
+    display: flex;
+}
+
+form {
+    width: 800px;
+}
+
+.logo-img {
+    width: 455px;
+    margin-right: 5px;
+}
+
+.logo-img img {
+    max-height: 250px;
+    margin: 5px 5px;
+}
+
+.area {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    max-width: 500px;
+}
+
+.area--title {
+    width: 200px;
+    text-align: right;
+    padding-right: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.area--input {
+    flex: 1;
+}
+
+.form-cadastro .area--input .btn {
+    margin-top: 75px;
+}
+
+.form-cadastro .area--input .btn + .btn {
+    margin-left: 10px;
+}
+
+select, select option {
+    text-transform: uppercase;
+}
+
+#photos {
+    padding: 8px;
+}
+
+#resume {
+    height: 100px;
+}

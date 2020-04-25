@@ -19,11 +19,6 @@ module.exports =
 
         const { idAd, subtitle, imgAd } = request.body;
         const count = request.body.length;
-        /*
-        request.body.forEach(function (item) {//got an exception 
-            const { idAd, subtitle, imageAd } = item;
-        });
-        */
         let resp;
 
         try

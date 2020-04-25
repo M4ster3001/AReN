@@ -1,1 +1,1 @@
-module.exports = { "extends": "standard" };
+export default { "extends": "standard" };

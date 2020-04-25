@@ -1,11 +1,14 @@
 const connection = require( '../database/connection' );
 const crypto = require( 'crypto' );
+const bCrypt = require( 'bcrypt' );
+const salts = 12;
 
 module.exports = {
 
     async login( request, response ){
         
-        const { login_email, login_password } = request.body;
+        let { login_email, login_password } = request.body;
+        login_email = login_email.trim();
 
         if( !login_email || !login_password ) {
             return response.json({ error: 'Ocorreu um problema ao logar, tente novamente' });
@@ -13,13 +16,19 @@ module.exports = {
         
         try { 
 
-            const login = await connection( 'users' ).where({ email: login_email, password: login_password }).select( 'idUser' ).first();
+            const login = await connection( 'users' ).where({ email: login_email }).select( 'idUser', 'password' ).first();
 
-            if( !login ) {
+            if( !bCrypt.compareSync( login_password, login.password ) ) {
                 return response.json({ error: 'Login ou senha inválidos' });
             }
 
-            const token = crypto.randomBytes( 10 ).toString( 'HEX' );
+            const token = crypto.randomBytes( 12 ).toString( 'HEX' );
+            const query = await connection( 'users' ).where( 'idUser', login.idUser ).update({ token: token })
+
+            if( !query ) {
+                return response.json({ error: 'Ocorreu um erro no acesso código 3' });
+            }
+
             return response.json({ token: token });
 
         } catch( er ) {
@@ -37,10 +46,13 @@ module.exports = {
 
     async create( request, response ) {
         
-        const { name, email, idState, password } = request.body;
+        let { name, email, idState, password } = request.body;
         const flg_ativo = 1;
-        const token = crypto.randomBytes( 10 ).toString( 'HEX' );
+        const token = crypto.randomBytes( 12 ).toString( 'HEX' );
 
+        password = bCrypt.hashSync( password, salts );
+        email = email.trim();
+        
         try {
 
             const resp = await connection( 'users' ).insert({
@@ -66,14 +78,14 @@ module.exports = {
     async delete( request, response ) {
 
         const { idUser } = request.query;
-        const user_id = await connection( 'users' ).where( 'idUser', id ).select( 'idUser' ).first();
+        const user_id = await connection( 'users' ).where( 'idUser', idUser ).select( 'idUser' ).first();
 
         if( !user_id )
         {
             return response.status( 401 ).json({ erro: 'Usuário não encontrado' });
         }
 
-        await connection( 'users' ).where( 'idUser', id ).delete();
+        await connection( 'users' ).where( 'idUser', idUser ).delete();
         return response.status( 204 ).send();
     }
 

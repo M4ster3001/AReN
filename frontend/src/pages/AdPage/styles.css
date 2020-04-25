@@ -4,6 +4,17 @@
     box-shadow: none !important;
 }
 
+.container-adpage .BreadChumb {
+    font-size: 13px;
+    margin-top: 20px;
+}
+
+.container-adpage .BreadChumb a {
+    display: inline-block;
+    margin: 0 5px;
+    text-decoration: underline;
+    color: #000;
+}
 
 .container-adpage .box {
     background-color: #FFF;
@@ -59,11 +70,16 @@
     width: 250px;
 }
 
-.container-adpage .rightSide .box-price {
+.container-adpage .rightSide .price-item {
     font-size: 16px;
-    display: block;
-    font-weight: bold;
+    font-weight: 400;   
     text-align: center;
+    display: block;
+}
+
+.container-adpage .rightSide .price-item strong {
+    font-size: 20px;
+    display: block;
 }
 
 .container-adpage .rightSide .contactSellerLink {
@@ -83,4 +99,18 @@
 
 .container-adpage .rightSide .contactSellerLink:hover {
     transform: scale( 1.05 );
+}
+
+.container-adpage .rightSide .createdBy {
+    padding: 10px;
+}
+
+.container-adpage .rightSide .createdBy strong {
+    font-size: 18px;
+}
+
+.container-adpage .rightSide .createdBy small {
+    display: block;
+    color: #999;
+    margin-top: 10px;
 }

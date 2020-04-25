@@ -4,6 +4,29 @@ import qs from 'qs'
 
 const BaseAPI = 'http://localhost:3333'
 
+const apiFetchFile = async ( endpoint, body ) => {
+  if (!body.token) {
+    const token = Cookies.get('token')
+    if (token) {
+      body.append('token', token)
+    }
+  }
+
+  const res = await fetch(BaseAPI + endpoint, {
+    method: 'POST',
+    body
+  })
+
+  const json = await res.json()
+
+  /*if (json.notallowed) {
+    window.location.href = '/login'
+    return
+  }*/
+
+  return json
+}
+
 const apiFetchPost = async (endpoint, body) => {
   if (!body.token) {
     const token = Cookies.get('token')
@@ -15,7 +38,7 @@ const apiFetchPost = async (endpoint, body) => {
   const res = await fetch(BaseAPI + endpoint, {
     method: 'POST',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-type': 'application/json'
     },
     body: JSON.stringify(body)
@@ -70,7 +93,7 @@ const olxAPI = {
     return json
   },
 
-  register: async (name, stateLoc, email, password) => {
+  postRegister: async (name, stateLoc, email, password) => {
     const json = await apiFetchPost(
       '/users/register',
       { name, idState: stateLoc, email, password }
@@ -95,9 +118,18 @@ const olxAPI = {
 
   getAd: async (id, moreAds = false) => {
     const json = await apiFetchGet(
-      '/ad/:id',
+      '/ad/view',
       { idAd: id, others: moreAds }
     )
+    return json
+  },
+
+  AddAd: async ( fData ) => {
+    const json = await apiFetchFile(
+      '/ad/register',
+      fData
+    )
+
     return json
   }
 

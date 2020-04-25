@@ -26,28 +26,28 @@ export default function Header () {
         <nav className="sidebar">
           <ul>
             { logged &&
-                            <>
-                              <li>
-                                <Link to="/my-account">Minha conta</Link>
-                              </li>
-                              <li>
-                                <button className="nobutton" onClick={ handleLogout } >Sair</button>
-                              </li>
-                              <li>
-                                <Link to="/newad" className="button" >Poste um anuncio</Link>
-                              </li>
-                            </>
+              <>
+                <li>
+                  <Link to="/my-account">Minha conta</Link>
+                </li>
+                <li>
+                  <button className="nobutton" onClick={ handleLogout } >Sair</button>
+                </li>
+                <li>
+                  <Link to="/newad" className="button" >Poste um anuncio</Link>
+                </li>
+              </>
             }
             {
               !logged &&
-                            <>
-                              <li>
-                                <Link to="/login">Login</Link>
-                              </li>
-                              <li>
-                                <Link to="/register">Cadastrar</Link>
-                              </li>
-                            </>
+                <>
+                  <li>
+                    <Link to="/login">Login</Link>
+                  </li>
+                  <li>
+                    <Link to="/register">Cadastrar</Link>
+                  </li>
+                </>
 
             }
 

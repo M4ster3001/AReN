@@ -8,6 +8,8 @@ import { Template } from './components/MainComponents'
 import Header from './components/partials/Header'
 import Footer from './components/partials/Footer'
 
+// import useApi from './helpers/olxAPI';
+
 import Routes from './Routes'
 
 import './global.css'

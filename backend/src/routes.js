@@ -1,6 +1,8 @@
 const express = require( 'express' );
-
 const routes = express.Router();
+
+const multer = require( 'multer' );
+const upload = multer({ dest: 'upload/' });
 
 //Controllers
 const usersControllers = require( './controllers/usersControllers' );
@@ -19,13 +21,13 @@ routes.delete( '/users/delete', usersControllers.delete );
 //Ads
 routes.get( '/ads', adsControllers.index );
 routes.get( '/ad/list', adsControllers.index );
-routes.get( '/ad/:id', adsControllers.index );
-routes.post( '/ad/register', adsControllers.create );
+routes.get( '/ad/view', adsControllers.index );
+routes.post( '/ad/register', upload.single( 'img' ), adsControllers.create);
 routes.put( '/ad/update', adsControllers.update );
 
 //Gallery
 routes.get( '/ad/gallery/list', galleryControllers.index );
-routes.get( '/ad/gallery/:id', galleryControllers.index );
+routes.get( '/ad/gallery', galleryControllers.index );
 routes.post( '/ad/gallery/register', galleryControllers.create );
 routes.put( '/ad/gallery/update', galleryControllers.update );
 

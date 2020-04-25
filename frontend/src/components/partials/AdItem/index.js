@@ -11,7 +11,7 @@ export default (props) => {
 
   return (
     <div className="aditem">
-      <Link to={`/ad/${props.data.idAd}`}>
+      <Link to={`/ad/view/${props.data.idAd}`}>
         <div className="imgItem">
           <img src={ PATH_ADS + props.data.imgAd } />
         </div>

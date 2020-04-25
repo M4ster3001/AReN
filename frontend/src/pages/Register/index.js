@@ -41,7 +41,7 @@ export default function Register () {
     }
 
     try {
-      const json = await api.register(name, stateLoc, email, password)
+      const json = await api.postRegister(name, stateLoc, email, password)
       if (json.error) {
         setError(json.error)
       } else {
@@ -59,7 +59,7 @@ export default function Register () {
     <div className="container">
       <div className="signin-header">Cadastro</div>
       { error &&
-                    <div className="error-message">{ error }</div>
+        <div className="error-message">{ error }</div>
       }
       <div className="signin-body">
 
