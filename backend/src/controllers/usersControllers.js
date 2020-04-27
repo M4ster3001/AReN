@@ -1,6 +1,6 @@
-import { connection } from '../database/connection';
-import { crypto } from  'crypto';
-import { bCrypt } from  'bcrypt';
+import connection from '../database/connection';
+import crypto from  'crypto';
+import bCrypt from  'bcrypt';
 const salts = 12;
 
 module.exports = {
@@ -78,15 +78,10 @@ module.exports = {
     async remove( request, response ) {
 
         const { idUser } = request.query;
-        const user_id = await connection( 'users' ).where( 'idUser', idUser ).select( 'idUser' ).first();
-
-        if( !user_id )
-        {
-            return response.status( 401 ).json({ erro: 'Usuário não encontrado' });
-        }
-
-        await connection( 'users' ).where( 'idUser', idUser ).delete();
-        return response.status( 204 ).send();
+        const user_id = await connection( 'users' ).findOneAndDelete( idUser , ( error, message ) => {
+            if ( error ) { res.json( error ); }
+            res.json( message );
+        })
     }
 
 }

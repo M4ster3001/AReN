@@ -1,4 +1,4 @@
-const connection = require( '../database/connection' );
+const connection = require('../database/connection').default;
 
 module.exports = 
 {
@@ -60,7 +60,7 @@ module.exports =
         return response.json( resp );
     },
 
-    async delete( request, response ) {
+    async remove( request, response ) {
 
     }
 

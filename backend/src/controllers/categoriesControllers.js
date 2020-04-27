@@ -1,4 +1,4 @@
-const connection = require( '../database/connection' );
+const connection = require('../database/connection').default;
 
 module.exports = 
 {
@@ -52,7 +52,7 @@ module.exports =
 
     },
 
-    async delete( request, response ) {
+    async remove( request, response ) {
 
         const { idCategory } = request.query;
         const category_id = await connection( 'categories' ).where( 'idCategory', idCategory ).select( 'idCategory' ).first();

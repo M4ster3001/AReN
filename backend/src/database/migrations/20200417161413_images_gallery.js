@@ -6,7 +6,8 @@ exports.up = function(knex) {
         table.increments( 'idImgGal' );
         table.integer( 'idAd' ).notNullable();
         table.string( 'subtitle' );
-        table.string( 'imgAd' ).notNullable();
+        table.double( 'size' );
+        table.string( 'url' ).notNullable();
 
         table.timestamp('createdAt').defaultTo( knex.fn.now() );
         table.timestamp('updatedAt');

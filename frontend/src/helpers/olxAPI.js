@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import Cookies from 'js-cookie'
 import qs from 'qs'
+import axios from 'axios'
 
 const BaseAPI = 'http://localhost:3333'
 
@@ -16,6 +17,10 @@ const apiFetchFile = async ( endpoint, body ) => {
     method: 'POST',
     body
   })
+console.log( body )
+  axios.post( BaseAPI + endpoint, body ).then( res => {
+    console.log( res )
+  } )
 
   const json = await res.json()
 

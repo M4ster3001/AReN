@@ -1,109 +1,106 @@
-const connection = require( '../database/connection' );
+import connection from '../database/connection';
 
-module.exports = 
-{
-    async select( request, response ) {
+export async function select(req, res) {
 
-        const { table, data = [], filter = [], select = '*', orderColumn = 'createdAt', orderDir = 'ASC', limit = -1 } = request;
-        let query = '';
+    const { table, data = [], filter = [], select = '*', orderColumn = 'createdAt', orderDir = 'ASC', limit = -1 } = req;
+    let query = '';
+    try {
 
-        try{
-
-            if( data ) {
-
-                if( filter ) {
-
-                    if( filter.type === 'notEqual' ){
-                        response = await connection( table ).where( data ).whereNot( filter.data ).select( select ).limit( limit ).orderBy( orderColumn, orderDir );
-                    } else if( filter.type === 'others' ){
-                        response = await connection( table ).where( data ).andWhere( filter.column, filter.condition, filter.value ).select( select ).limit( limit ).orderBy( orderColumn, orderDir );
-                    } else {
-                        response = await connection( table ).where( data ).select( select ).limit( limit ).orderBy( orderColumn, orderDir );
-                    }
-
-                } else {
-                    response = await connection( table ).where( data ).select( select ).limit( limit ).orderBy( orderColumn, orderDir );
+        if (data) {
+            if (filter) {
+                if (filter.type === 'notEqual') {
+                    query = await connection(table).where(data).whereNot(filter.data).select(select).limit(limit).orderBy(orderColumn, orderDir);
                 }
-
-            } else {
-                
-                if( filter ) {
-
-                    if( filter.type === 'notEqual' ){
-                        response = await connection( table ).whereNot( filter.data ).select( select ).limit( limit ).orderBy( orderColumn, orderDir );
-                    } else if( filter.type === 'others' ){
-                        response = await connection( table ).andWhere( filter.column, filter.condition, filter.value ).select( select ).limit( limit ).orderBy( orderColumn, orderDir );
-                    } else {
-                        response = await connection( table ).select( select ).limit( limit ).orderBy( orderColumn, orderDir );
-                    }
-
-                } else {
-                    response = await connection( table ).select( select ).limit( limit ).orderBy( order );
-                }               
-
+                else if (filter.type === 'others') {
+                    query = await connection(table).where(data).andWhere(filter.column, filter.condition, filter.value).select(select).limit(limit).orderBy(orderColumn, orderDir);
+                }
+                else {
+                    query = await connection(table).where(data).select(select).limit(limit).orderBy(orderColumn, orderDir);
+                }
             }
-
-        } catch( er ) {
-            return { 'error': er };
+            else {
+                query = await connection(table).where(data).select(select).limit(limit).orderBy(orderColumn, orderDir);
+            }
         }
-        console.log( response );
-        return response;
-        
-    },
-
-    async quantity( request, response ) {
-        const { table, column, nameCount = 'qtde' } = request;
-
-        try{
-            return await connection( table ).count( column, { as : nameCount } );
-        }catch(er){
-            return { 'error': er };
-        }
-    },
-
-    async sum( request, response ) {
-        const { table, column, nameCount = 'qtde' } = request;
-
-        try{
-            return await connection( table ).sum( column, { as : nameCount } );
-        }catch(er){
-            return { 'error': er };
-        }
-    },
-
-    async insert( request, response ) {
-
-        const { table, data } = request;
-        let resp; 
-
-        try {
-
-            resp = await connection( table ).insert( data );
-
-        } catch( er ) {
-            return response.json( er );
+        else {
+            if (filter) {
+                if (filter.type === 'notEqual') {
+                    query = await connection(table).whereNot(filter.data).select(select).limit(limit).orderBy(orderColumn, orderDir);
+                }
+                else if (filter.type === 'others') {
+                    query = await connection(table).andWhere(filter.column, filter.condition, filter.value).select(select).limit(limit).orderBy(orderColumn, orderDir);
+                }
+                else {
+                    query = await connection(table).select(select).limit(limit).orderBy(orderColumn, orderDir);
+                }
+            }
+            else {
+                query = await connection(table).select(select).limit(limit).orderBy(order);
+            }
         }
 
-        return response.json( resp );
-    },
+    }
+    catch (er) {
+        return { 'error': er };
+    }
+    //console.log( query );
+    return query;
 
-    async update( request, response ) {
-        
-        const { table, select, data } = request;
-        let resp;
-        try
-        {
+}
 
-            resp = await connection( table ).where( select ).update( data );
-            
-        }catch( er ) 
-        {
-            return response.json( er );
-        }
+export async function quantity(req, res) {
+    const { table, column, nameCount = 'qtde' } = req;
+    try {
+        return await connection(table).count(column, { as: nameCount });
+    }
+    catch (er) {
+        return { 'error': er };
+    }
+}
 
-        return response.json( resp );
-    },
+export async function sum(req, res) {
+    const { table, column, nameCount = 'qtde' } = req;
+    try {
+        return await connection(table).sum(column, { as: nameCount });
+    }
+    catch (er) {
+        return { 'error': er };
+    }
+}
 
-    async delete( request, response ) {}
+export async function insert(req, res) {
+    const { table, data } = req;
+    let resp;
+    try {
+        resp = await connection(table).insert(data);
+    }
+    catch (er) {
+        return res.json(er);
+    }
+    return res.json(resp);
+}
 
+export async function update(req, res) {
+    const { table, select, data } = req;
+    let resp;
+    try {
+        resp = await connection( table ).where( select ).update( data );
+    }
+    catch (er) {
+        return res.json(er);
+    }
+    return res.json(resp);
+}
+
+export async function remove(req, res) {
+
+    const { table, data, select } = req;
+    const query = await connection( table ).where( data ).select( select ).first().catch( function( error ) { return res.status( 400 ).send( error ) } );
+
+    if( !query ){
+        return { error: 'Anúncio não encontrado' };
+    }
+
+    await connection( table ).where( data ).delete().catch( function( error ) { return res.status( 400 ).send( error ) } );
+    return res.status( 200 )
 }

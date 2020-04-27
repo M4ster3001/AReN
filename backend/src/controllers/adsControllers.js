@@ -1,5 +1,5 @@
 
-const conController = require( './connectionController' );
+import { select, insert, update, remove } from './connectionController'
 const PATH_ADS = 'http://localhost:3000/assets/img/';
 
 module.exports = 
@@ -15,7 +15,7 @@ module.exports =
         
         if( idAd ){
 
-            query = await conController.select({
+            query = await select({
                 'table': 'ads', 
                 'data': { 
                     'idAd': idAd,
@@ -23,7 +23,7 @@ module.exports =
                 'select': '*', 
             });
 
-            info_user = await conController.select({
+            info_user = await select({
                 'table': 'users', 
                 'data': { 
                     'idUser': query[0].idUser,
@@ -34,7 +34,7 @@ module.exports =
             
             if( info_user[0] ) {
 
-                info_state = await conController.select({
+                info_state = await select({
                     'table': 'states', 
                     'data': { 
                         'idState': info_user[0].idState,
@@ -47,7 +47,7 @@ module.exports =
 
             if( query[0].idCategory ) {
 
-                info_category = await conController.select({
+                info_category = await select({
                     'table': 'categories',
                     'data': {
                         'idCategory': query[0].idCategory
@@ -59,7 +59,7 @@ module.exports =
             }
             
             
-            gallery = await conController.select({
+            gallery = await select({
                 'table': 'images_gallery', 
                 'data': { 
                     'idAd': idAd,
@@ -76,7 +76,7 @@ module.exports =
 
             if( others ) {
 
-                query_others = await conController.select({
+                query_others = await select({
                     'table': 'ads', 
                     'data': { 
                         'idUser': query[0].idUser,
@@ -95,7 +95,7 @@ module.exports =
 
         } else {         
 
-            query = await conController.select({
+            query = await select({
                 'table': 'ads', 
                 'data': { 
                     'flg_ativo': flg_ativo 
@@ -116,9 +116,9 @@ module.exports =
     async create( request, response ) {
 
         console.log( request );
-        const { idCategory, description, title, resume, imgAd, price, flg_ativo = 1, token } = request.body;
+        const { idCategory, description, title, resume, file, price, flg_ativo = 1, token } = request.body;
         let { images } = request.file; 
-        const info_user = await conController.select({
+        const info_user = await select({
             'table': 'users',
             'data': {
                 'token': token
@@ -140,7 +140,7 @@ module.exports =
         const idUser = info_user[0].idUser; 
         console.log( 'Id: '+ idUser );
         /*
-        const query = await conController.insert({
+        const query = await insert({
             'table': 'ads',
             'data' : {
                 idUser, idCategory, description, title, resume, price, flg_ativo
@@ -157,7 +157,7 @@ module.exports =
         const { idAd, idUser, idCategory, description, title, resume, imgAd, value, flg_ativo } = request.body;
         let resp;
 
-        const query = await conController.update({
+        const query = await update({
             'table': 'ads',
             'select': {
                 'idAd': idAd
@@ -170,8 +170,26 @@ module.exports =
         return response.json( query );
     },
 
-    async delete( request, response ) {
+    async remove( request, response ) {
 
+        const { idAd } = request.query;
+
+        let resp = await remove({
+            'table': 'ads',
+            'data': {
+                'idAd': idAd
+            },
+            'select': 'idAd'
+        }).catch( function( er ) {
+            return response.status( 400 ).json( er );
+        } );
+
+        if( resp.error.trim() ) {
+            return response.status( 400 ).json( resp.error );
+        }
+
+        return response.status( 200 ).json( resp )
+        
     }
 
 }

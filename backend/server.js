@@ -2,7 +2,7 @@ require( 'dotenv' ).config({ path: 'variables.env' })
 
 import app from './app'
 
-app.set( 'port', process.env.PORT || 7000 );
+app.set( 'port', process.env.PORT || 3333 );
 
 if( app.listen() ){
     let server = app.listen();

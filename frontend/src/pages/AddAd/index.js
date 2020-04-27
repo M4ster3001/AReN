@@ -19,6 +19,7 @@ export default function AddAd () {
   const fileField = useRef();
   const history = useHistory();
 
+  const [ images, setImages ] = useState( [] );
   const [ categoryList, setCategoryList ] = useState( [] );
 
   const [disabled, setDisabled] = useState(false)
@@ -38,7 +39,7 @@ export default function AddAd () {
     //setDisabled( true );
     setError( '' );
     let errors = [];
-
+    console.log( images )
     if( !title.trim() ) {
       errors.push( 'Sem título' );
     }
@@ -55,11 +56,12 @@ export default function AddAd () {
         fData.append( 'resume', resume )
         fData.append( 'description', description )
         fData.append( 'price', price )
+        fData.append( 'images', images )
 
         if( fileField.current.files.length > 0 ) {
 
           for( let i = 0; i<fileField.current.files.length; i++ ){
-            fData.append( 'img', fileField.current.files[i] )
+            fData.append( 'files', fileField.current.files[i] )
           }
 
         }
@@ -93,7 +95,7 @@ export default function AddAd () {
       }
       <div className="body">
 
-        <form className="form-noimg form-cadastro" enctype="multipart/form-data" onSubmit={ handleSubmit }>
+        <form className="form-noimg form-cadastro" onSubmit={ handleSubmit }>
 
           <label htmlFor="" className="area">
             <div className="area--title">Título</div>
@@ -139,6 +141,13 @@ export default function AddAd () {
             <div className="area--title">Fotos do produto</div>
             <div className="area--input">
               <input type="file" id="photos" name="photos" ref={fileField} disabled={ disabled } multiple/>
+            </div>
+          </label>
+
+          <label htmlFor="" className="area">
+            <div className="area--title">Fotos do produto</div>
+            <div className="area--input">
+              <input type="file" id="photos" name="photos" value={ images }  onChange={ e => setImages(e.target.value) } disabled={ disabled } multiple/>
             </div>
           </label>
 
