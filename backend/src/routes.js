@@ -12,7 +12,7 @@ import usersControllers from './controllers/usersControllers';
 import statesControllers from './controllers/statesControllers';
 import adsControllers from './controllers/adsControllers';
 import categoriesControllers from './controllers/categoriesControllers';
-import galleryControllers from './controllers/galleryControllers';
+import { index, create, update, Delete } from './controllers/galleryControllers';
 
 /* Routes */
 //Users 
@@ -26,16 +26,15 @@ routes.get( '/ads', adsControllers.index );
 routes.get( '/ad/list', adsControllers.index );
 routes.get( '/ad/view', adsControllers.index );
 routes.post( '/ad/register', adsControllers.create);
-routes.post( '/ad/register/image', multer(multerConfig).single('file'), adsControllers.fileSave);
 routes.put( '/ad/update', adsControllers.update );
 routes.delete( '/ad/delete', adsControllers.remove );
 
 //Gallery
-routes.get( '/ad/gallery', galleryControllers.index );
-routes.get( '/ad/gallery/list', galleryControllers.index );
-routes.post( '/ad/gallery/register', galleryControllers.create );
-routes.put( '/ad/gallery/update', galleryControllers.update );
-routes.delete( '/ad/gallery/delete', galleryControllers.remove );
+routes.get( '/ad/gallery', index );
+routes.get( '/ad/gallery/list', index );
+routes.post( '/ad/gallery/register', multer(multerConfig).single('file'), create );
+routes.put( '/ad/gallery/update', update );
+routes.delete( '/ad/gallery/delete', Delete );
 
 //States
 routes.get( '/states', statesControllers.index );

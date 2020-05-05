@@ -41,7 +41,7 @@ const storageTypes = {
 
 module.exports = {
     dest: path.resolve( __dirname, '..', '..', 'tmp', 'uploads' ),
-    storage: process.env.NODE_DEV == 'DEV' ? storageTypes['local'] : storageTypes['s3'],
+    storage: storageTypes[process.env.STORAGE_TYPE],
     limits: {
         fileZife: 5 * 1024 * 1024
     },

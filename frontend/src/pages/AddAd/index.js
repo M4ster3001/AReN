@@ -5,7 +5,10 @@ import MaskedInput from 'react-text-mask'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import useAPI from '../../helpers/olxAPI'
 
+import Dropzone from 'react-dropzone'
+
 import './styles.css'
+import { DropContainer, Container, Content } from './styled'
 
 export default function AddAd () {
   const api = useAPI()
@@ -143,13 +146,27 @@ export default function AddAd () {
               <input type="file" id="photos" name="photos" ref={fileField} disabled={ disabled } multiple/>
             </div>
           </label>
-
+          
           <label htmlFor="" className="area">
             <div className="area--title">Fotos do produto</div>
             <div className="area--input">
-              <input type="file" id="photos" name="photos" value={ images }  onChange={ e => setImages(e.target.value) } disabled={ disabled } multiple/>
-            </div>
+              <Dropzone accept="image/*" onDropAccepted={() => {}}>
+              { ({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
+                <DropContainer 
+                  { ...getRootProps() }
+                  isDragActive={ isDragActive }
+                  isDragReject={ isDragReject }
+                >
+                  <input {...getInputProps()} />
+
+                  Jogar
+                </DropContainer>
+              ) }
+
+             </Dropzone>
+             </div>
           </label>
+          
 
           <label htmlFor="" className="area">
             <div className="area--title"></div>

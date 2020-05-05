@@ -1,7 +1,7 @@
-
-import { select, insert, update, remove } from './connectionController'
 require( 'dotenv' ).config({ path: 'variables.env' })
 
+import { select, insert, update, remove } from './connectionController'
+import connection from '../database/connection'
 
 module.exports = 
 {
@@ -152,31 +152,30 @@ module.exports =
 
     async fileSave( req, res ) {
 
-        let{ originalname: name, size, key, location: url = "" } = req.file
-        
+        let{ idAd, originalname: name, size, key, location: url = "" } = req.file
+
         if( !url ) {
-            url = ( process.env.NODE_DEV == 'DEV' ? process.env.PATH_LOCAL : '' ) 
+            url = ( process.env.NODE_DEV == 'DEV' ? process.env.PATH_LOCAL + name : '' ) 
         }
 
-        console.log( name, size, key, url )
-
-        const query = await insert({
-            'table': 'images_gallery',
-            'data': {
+        try{
+            resp = await connection('images_gallery').insert({
+                idAd,
                 subtitle: name,
                 size,
                 key,
                 url
-            }
-        }).catch( function( er ) {
-            return res.status( 400 ).json( er );
-        } );
+            });
 
-        if( !query ) {
-            return res.status( 400 ).json( query.error );
+            if( !resp ) {
+                return res.json({ error: 'Não foi possível salvar' })
+            }
+    
+        } catch( er ){
+            return res.json( er )
         }
     
-        return res.json({ status: 'ok' })
+        return res.status( 200 ).json(resp);
 
     },
 

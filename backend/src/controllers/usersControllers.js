@@ -2,6 +2,7 @@ import connection from '../database/connection';
 import crypto from  'crypto';
 import bCrypt from  'bcrypt';
 const salts = 12;
+const TABLE = 'users'
 
 module.exports = {
 
@@ -16,14 +17,14 @@ module.exports = {
         
         try { 
 
-            const login = await connection( 'users' ).where({ email: login_email }).select( 'idUser', 'password' ).first();
+            const login = await connection( TABLE ).where({ email: login_email }).select( 'idUser', 'password' ).first();
 
             if( !bCrypt.compareSync( login_password, login.password ) ) {
                 return response.json({ error: 'Login ou senha inválidos' });
             }
 
             const token = crypto.randomBytes( 12 ).toString( 'HEX' );
-            const query = await connection( 'users' ).where( 'idUser', login.idUser ).update({ token: token })
+            const query = await connection( TABLE ).where( 'idUser', login.idUser ).update({ token: token })
 
             if( !query ) {
                 return response.json({ error: 'Ocorreu um erro no acesso código 3' });
@@ -39,7 +40,7 @@ module.exports = {
     
     async index( request, response ) {
 
-        const users = await connection( 'users' ).select( '*' );
+        const users = await connection( TABLE ).select( '*' );
         return response.json( users );   
 
     },
@@ -55,7 +56,7 @@ module.exports = {
         
         try {
 
-            const resp = await connection( 'users' ).insert({
+            const resp = await connection( TABLE ).insert({
                 name,
                 email,
                 idState,
@@ -78,10 +79,20 @@ module.exports = {
     async remove( request, response ) {
 
         const { idUser } = request.query;
-        const user_id = await connection( 'users' ).findOneAndDelete( idUser , ( error, message ) => {
-            if ( error ) { res.json( error ); }
-            res.json( message );
-        })
+        try{
+            let query = await connection( TABLE ).where({ 'idUser': idUser }).delete().catch( ( err ) => {
+                return response.json( err );
+            } );
+    
+            if( !query ) {
+                return response.json({ error: 'Usuario não localizado' })
+            }
+        } catch( er ){
+            return response.json( er )
+        }
+    
+        return response.status( 204 ).send();
+
     }
 
 }

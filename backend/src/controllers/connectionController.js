@@ -70,10 +70,11 @@ export async function sum(req, res) {
 
 export async function insert(req, res) {
     const { table, data } = req;
-    console.log( table );
-    console.log( data );
+
     let resp;
-    try {
+
+    try 
+    {
         resp = await connection(table).insert(data).catch( function( error ) { return res.status( 400 ).send( error ) } );
         
         if( !resp ){
@@ -81,8 +82,9 @@ export async function insert(req, res) {
         }
     }
     catch (er) {
-        return res.json(er);
+        return { error: er };
     }
+
     return res.status( 200 ).json(resp);
 }
 
@@ -98,15 +100,18 @@ export async function update(req, res) {
     return res.json(resp);
 }
 
-export async function remove(req, res) {
+export async function remove( req, res, cb ) {
 
-    const { table, data, select } = req;
-    const query = await connection( table ).where( data ).select( select ).first().catch( function( error ) { return res.status( 400 ).send( error ) } );
+    const { table, data } = req;
 
-    if( !query ){
-        return { error: 'Ocorreu um erro ao deletar' };
+    let query = await connection( table ).where( data ).delete().catch( ( err ) => {
+        return err;
+    } );
+
+    if( !query ) {
+        return { error: 'Usuario não localizado' }
+    } else {
+        return { status: 'ok' }
     }
 
-    await connection( table ).where( data ).delete().catch( function( error ) { return res.status( 400 ).send( error ) } );
-    return res.status( 200 )
 }
