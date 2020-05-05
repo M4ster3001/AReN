@@ -25,10 +25,8 @@ routes.delete( '/users/delete', usersControllers.remove );
 routes.get( '/ads', adsControllers.index );
 routes.get( '/ad/list', adsControllers.index );
 routes.get( '/ad/view', adsControllers.index );
-routes.post( '/ad/register', multer(multerConfig).single('file'), (req, res) => {
-    console.log( req.file )
-    return res.json({ hello: 'World'})
-} );
+routes.post( '/ad/register', adsControllers.create);
+routes.post( '/ad/register/image', multer(multerConfig).single('file'), adsControllers.fileSave);
 routes.put( '/ad/update', adsControllers.update );
 routes.delete( '/ad/delete', adsControllers.remove );
 

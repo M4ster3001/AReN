@@ -1,6 +1,7 @@
 
 import { select, insert, update, remove } from './connectionController'
-const PATH_ADS = 'http://localhost:3000/assets/img/';
+require( 'dotenv' ).config({ path: 'variables.env' })
+
 
 module.exports = 
 {
@@ -116,8 +117,7 @@ module.exports =
     async create( request, response ) {
 
         console.log( request );
-        const { idCategory, description, title, resume, file, price, flg_ativo = 1, token } = request.body;
-        let { images } = request.file; 
+        const { idCategory, description, title, resume, price, flg_ativo = 1, token } = request.body;
         const info_user = await select({
             'table': 'users',
             'data': {
@@ -127,12 +127,10 @@ module.exports =
             'limit': 1
         })
 
-        console.log( images );
         console.log( 'Cat: '+ idCategory );
         console.log( 'desc: '+ description );
         console.log( 'title: '+ title );
         console.log( 'res: '+ resume );
-        console.log( 'img: '+ imgAd );
         console.log( 'val: '+ price );
         console.log( 'flg: '+ flg_ativo );
         console.log( 'tk: '+ token );
@@ -152,9 +150,39 @@ module.exports =
 
     },
 
+    async fileSave( req, res ) {
+
+        let{ originalname: name, size, key, location: url = "" } = req.file
+        
+        if( !url ) {
+            url = ( process.env.NODE_DEV == 'DEV' ? process.env.PATH_LOCAL : '' ) 
+        }
+
+        console.log( name, size, key, url )
+
+        const query = await insert({
+            'table': 'images_gallery',
+            'data': {
+                subtitle: name,
+                size,
+                key,
+                url
+            }
+        }).catch( function( er ) {
+            return res.status( 400 ).json( er );
+        } );
+
+        if( !query ) {
+            return res.status( 400 ).json( query.error );
+        }
+    
+        return res.json({ status: 'ok' })
+
+    },
+
     async update( request, response ) {
 
-        const { idAd, idUser, idCategory, description, title, resume, imgAd, value, flg_ativo } = request.body;
+        const { idAd, idUser, idCategory, description, title, resume, value, flg_ativo } = request.body;
         let resp;
 
         const query = await update({

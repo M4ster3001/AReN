@@ -70,14 +70,20 @@ export async function sum(req, res) {
 
 export async function insert(req, res) {
     const { table, data } = req;
+    console.log( table );
+    console.log( data );
     let resp;
     try {
-        resp = await connection(table).insert(data);
+        resp = await connection(table).insert(data).catch( function( error ) { return res.status( 400 ).send( error ) } );
+        
+        if( !resp ){
+            return { error: 'Problema ao salvar' };
+        }
     }
     catch (er) {
         return res.json(er);
     }
-    return res.json(resp);
+    return res.status( 200 ).json(resp);
 }
 
 export async function update(req, res) {
@@ -98,7 +104,7 @@ export async function remove(req, res) {
     const query = await connection( table ).where( data ).select( select ).first().catch( function( error ) { return res.status( 400 ).send( error ) } );
 
     if( !query ){
-        return { error: 'Anúncio não encontrado' };
+        return { error: 'Ocorreu um erro ao deletar' };
     }
 
     await connection( table ).where( data ).delete().catch( function( error ) { return res.status( 400 ).send( error ) } );

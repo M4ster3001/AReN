@@ -7,6 +7,7 @@ exports.up = function(knex) {
         table.integer( 'idAd' ).notNullable();
         table.string( 'subtitle' );
         table.double( 'size' );
+        table.string( 'key' );
         table.string( 'url' ).notNullable();
 
         table.timestamp('createdAt').defaultTo( knex.fn.now() );
