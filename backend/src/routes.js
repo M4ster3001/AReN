@@ -33,7 +33,7 @@ routes.delete( '/ad/delete', adsControllers.remove );
 routes.get( '/ad/gallery', index );
 routes.get( '/ad/gallery/list', index );
 routes.post( '/ad/gallery/register', multer(multerConfig).single('file'), create );
-routes.put( '/ad/gallery/update', update );
+routes.put( '/ad/gallery/update', multer(multerConfig).single('file'), update );
 routes.delete( '/ad/gallery/delete', Delete );
 
 //States

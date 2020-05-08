@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./start.js --exec babel-node --presets babel-preset-env",
-    "start": "start.js --exec babel-node --presets babel-preset-env",
+    "start": "./start.js --exec babel-node --presets babel-preset-env",
     "test:watch": "jest --watchAll",
     "devtest": "jest --watchAll ./start",
     "test:memory": "jest --env=node --logHeapUsage ./start"

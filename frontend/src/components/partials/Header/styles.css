@@ -12,14 +12,20 @@
         height: 60px;
     }
 
-    .logo-1, .logo-2, .logo-3 {
-        font-size: 27px;
+    .logo-1, .logo-2, .logo-4 {
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .logo-3 {
+        font-size: 20px;
         font-weight: bold;
     }
 
     .logo-1 { color: #FF0000; top: -2px; position: relative; }
     .logo-2 { color: #00FF00; top: -5px; position: relative; }
     .logo-3 { color: #0000FF; }
+    .logo-4 { color: #F4D03F; top: -1px; position: relative; }
 
     .sidebar {
         padding-top: 10px;

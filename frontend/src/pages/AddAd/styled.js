@@ -10,7 +10,7 @@ const dragReject = css`
 
 export const Container = styled.div`
     height: 100%;
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
 `;
@@ -41,4 +41,15 @@ export const DropContainer = styled.div.attrs({
   ${ props => props.isDragReject && dragReject };
 `;
 
-export const UploadMessage = styled.p``;
+const messageColors = {
+    default: '#999',
+    error: '#e57878',
+    success: '#78e5d5'
+}
+
+export const UploadMessage = styled.p`
+    display: flex;
+    color: ${ props => messageColors[ props.type || 'default' ] };
+    justify-content: center;
+    align-items: center;
+`;

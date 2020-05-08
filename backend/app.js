@@ -12,7 +12,7 @@ app.use( cors() )
 app.use( bodyParse.json() ) 
 app.use( bodyParse.urlencoded({ urlencoded: true, extended: true }) ) 
 app.use( morgan('dev') )
-app.use( '/files', express.static( path.resolve( __dirname, "..", "tmp", "uploads" ) ) )
+app.use( '/files', express.static( path.resolve( __dirname, ".", "tmp", "uploads" ) ) )
 
 app.use( '/', router )
 

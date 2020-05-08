@@ -31,7 +31,7 @@ export async function create(req, res) {
     const { idAd } = req.body
     
     if( !url ) {
-        url = ( process.env.NODE_DEV == 'DEV' ? process.env.PATH_LOCAL + name : '' ) 
+        url = ( process.env.NODE_DEV == 'DEV' ? process.env.PATH_LOCAL + key : '' ) 
     }
 
     try{
@@ -56,11 +56,12 @@ export async function create(req, res) {
 
 export async function update(request, response) {
 
-    let{ idAd, originalname: name, size, key, location: url = "" } = req.file
+    let{ originalname: name, size, key, location: url = "" } = request.file
+    let  { idImgGal, idAd } = request.body
     let resp;
 
     if( !url ) {
-        url = ( process.env.NODE_DEV == 'DEV' ? process.env.PATH_LOCAL + name : '' ) 
+        url = ( process.env.NODE_DEV == 'DEV' ? process.env.PATH_LOCAL + key : '' ) 
     }
 
     try{

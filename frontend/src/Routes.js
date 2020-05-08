@@ -15,15 +15,15 @@ import NotFound from './pages/NotFound';
 export default () => {
     return (
 
-            <Switch>
-                <RouteHandler exact path="/" component={ Home } />               
-                <RouteHandler exact path="/login" component={ Login } />
-                <RouteHandler exact path="/register" component={ Registrar } />
-                <RouteHandler exact path="/ad/view/:idAd" component={ AdPage } />
-                <RouteHandler private exact path="/newad" component={ AddAd } />
-                <RouteHandler private exact path="/myaccount" component={ MyAcount } />
-                <RouteHandler> <NotFound /> </RouteHandler>
-            </Switch>
+        <Switch>
+            <RouteHandler exact path="/" component={ Home } />               
+            <RouteHandler exact path="/login" component={ Login } />
+            <RouteHandler exact path="/register" component={ Registrar } />
+            <RouteHandler exact path="/ad/view/:idAd" component={ AdPage } />
+            <RouteHandler private exact path="/newad" component={ AddAd } />
+            <RouteHandler private exact path="/myaccount" component={ MyAcount } />
+            <RouteHandler> <NotFound /> </RouteHandler>
+        </Switch>
 
     );
 }

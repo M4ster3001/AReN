@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useState } from 'react'
-import useAPI from '../../helpers/olxAPI'
+import useAPI from '../../helpers/API'
 import { doLogin } from '../../helpers/authHandler'
 
 import './styles.css'

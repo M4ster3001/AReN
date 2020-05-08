@@ -1,39 +1,37 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React from 'react';
+import { connect } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
-import { BrowserRouter } from 'react-router-dom'
+import './App.css';
 
-import { Template } from './components/MainComponents'
+import { Template } from './components/MainComponents';
+import Header from './components/partials/Header';
+import Footer from './components/partials/Footer';
 
-import Header from './components/partials/Header'
-import Footer from './components/partials/Footer'
-
-// import useApi from './helpers/olxAPI';
-
-import Routes from './Routes'
-
-import './global.css'
+import Routes from './Routes';
 
 const Page = (props) => {
   return (
     <BrowserRouter>
       <Template>
         <Header />
-
         <Routes />
-
         <Footer />
       </Template>
     </BrowserRouter>
-  )
+  );
 }
 
 const mapStateToProps = (state) => {
-  return { user: state.user }
+  return {
+    user:state.user
+  };
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {}
+  return {
+
+  };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Page)
+export default connect(mapStateToProps, mapDispatchToProps)(Page);

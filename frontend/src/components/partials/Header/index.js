@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import './styles.css'
+import { HeaderArea } from './styles';
 
 import { isLogged, doLogout } from '../../../helpers/authHandler'
 
@@ -14,15 +14,16 @@ export default function Header () {
   }
 
   return (
-    <div className="container">
-      <div className="header-body">
-        <div className="logo">
-          <Link to="/" exact="true">
-            <span className="logo-1">O</span>
-            <span className="logo-2">L</span>
-            <span className="logo-3">X</span>
-          </Link>
-        </div>
+    <HeaderArea>
+      <div className="container">
+          <div className="logo">
+            <Link to="/" exact="true">
+              <span className="logo-1">A</span>
+              <span className="logo-2">R</span>
+              <span className="logo-3">&</span>
+              <span className="logo-4">N</span>
+            </Link>
+          </div>
         <nav className="sidebar">
           <ul>
             { logged &&
@@ -54,6 +55,6 @@ export default function Header () {
           </ul>
         </nav>
       </div>
-    </div>
+    </HeaderArea>
   )
 }

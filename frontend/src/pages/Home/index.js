@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import useAPI from '../../helpers/olxAPI'
+import useAPI from '../../helpers/API'
 import { Link } from 'react-router-dom'
 
 import AdItem from '../../components/partials/AdItem'

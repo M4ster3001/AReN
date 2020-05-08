@@ -1,13 +1,13 @@
 import React from 'react'
 
-import './styles.css'
+import { FooterArea, Copyright } from './styles';
 
 export default function Footer () {
   return (
-    <div className="container">
-      <div className="footer">
-        <label htmlFor="" className="label-copyright"> COPYRIGHT { new Date().getFullYear() }</label>
-      </div>
-    </div>
+    <FooterArea>
+      <Copyright>
+        COPYRIGHT { new Date().getFullYear() }
+      </Copyright>
+    </FooterArea>
   )
 };

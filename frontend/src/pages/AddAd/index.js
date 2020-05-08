@@ -3,12 +3,18 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
 import MaskedInput from 'react-text-mask'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
-import useAPI from '../../helpers/olxAPI'
+import useAPI from '../../helpers/API'
+import axiosAPI from '../../helpers/axiosAPI'
+
+import { uniqueId } from 'lodash'
+import filesize from 'filesize'
 
 import Dropzone from 'react-dropzone'
 
+import FileList from '../../components/partials/FileList'
+
 import './styles.css'
-import { DropContainer, Container, Content } from './styled'
+import { DropContainer, Container, Content, UploadMessage, Teste } from './styled'
 
 export default function AddAd () {
   const api = useAPI()
@@ -25,9 +31,12 @@ export default function AddAd () {
   const [ images, setImages ] = useState( [] );
   const [ categoryList, setCategoryList ] = useState( [] );
 
+  const [ uploadedFiles, setUploadedFiles ] = useState( [] );
+
   const [disabled, setDisabled] = useState(false)
   const [error, setError] = useState('')
 
+  //Loading categories
   useEffect( () => {
     const getCategories = async() => {
       const slist  = await api.getCategories()
@@ -36,13 +45,67 @@ export default function AddAd () {
 
     getCategories()
   }, [])
+  
+  function handleUpload(files) {
+    
+    const fs = files.map( file => ({
+      file,
+      id: uniqueId(),
+      name: file.name,
+      readableSize: filesize( file.size ),
+      preview: URL.createObjectURL( file ),
+      progress: 0,
+      uploaded: false,
+      error: false,
+      url: null
 
+    }) )
+
+    setUploadedFiles( uploadedFiles => ([ ...uploadedFiles,  ...fs ]) )
+
+    console.log( 'Handle' )
+    console.log( uploadedFiles )
+
+    uploadedFiles.forEach( processUpload )
+
+  };
+
+  function updateFile( id, data ) {
+
+    console.log( 'Dentro' )
+    console.log( uploadedFiles )
+
+    setUploadedFiles( uploadedFiles => uploadedFiles.map( uploadedFile => {
+      return id === uploadedFile.id ? { ...uploadedFile, ...data } : uploadedFile ; 
+    } ))
+  }
+
+  function processUpload( uploadedFile ) {
+
+    console.log( 'Proc' )
+    console.log( uploadedFiles )
+
+    const data = new FormData();
+
+    data.append( 'file', uploadedFile.file, uploadedFile.name );
+
+    const json = axiosAPI.post( '/ad/gallery/register', data, {
+      onUploadProgress: e => {
+        const progress = parseInt( Math.round( ( e.loaded * 100 ) / e.total ) )
+        //console.log( progress )
+        updateFile( uploadedFile.id, { progress } )
+      }
+    } );
+
+  }
+   
+  //Submit form
   async function handleSubmit(e) {
     e.preventDefault();
     //setDisabled( true );
     setError( '' );
     let errors = [];
-    console.log( images )
+
     if( !title.trim() ) {
       errors.push( 'Sem título' );
     }
@@ -89,6 +152,20 @@ export default function AddAd () {
     allowDecimal: true,
     decimalSymbol: ','
   })
+
+  let renderDragMessage = ( isDragActive, isDragReject ) => {
+
+    if( !isDragActive ) {
+      return <UploadMessage>Arraste os arquivos aqui ...</UploadMessage>
+    }
+
+    if( isDragReject ) {
+      return <UploadMessage type="error" >Arquivo não suportado</UploadMessage>
+    }
+
+    return <UploadMessage type="success">Solte os arquivos aqui</UploadMessage>
+
+  }
 
   return (
     <div className="container">
@@ -139,18 +216,11 @@ export default function AddAd () {
               <MaskedInput mask={priceMask} placeholder="R$" value={ price } onChange={ e => setPrice(e.target.value) } disabled={ disabled } required/>
             </div>
           </label>
-
+        
           <label htmlFor="" className="area">
             <div className="area--title">Fotos do produto</div>
             <div className="area--input">
-              <input type="file" id="photos" name="photos" ref={fileField} disabled={ disabled } multiple/>
-            </div>
-          </label>
-          
-          <label htmlFor="" className="area">
-            <div className="area--title">Fotos do produto</div>
-            <div className="area--input">
-              <Dropzone accept="image/*" onDropAccepted={() => {}}>
+              <Dropzone accept="image/*" onDropAccepted={ handleUpload }>
               { ({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
                 <DropContainer 
                   { ...getRootProps() }
@@ -158,13 +228,20 @@ export default function AddAd () {
                   isDragReject={ isDragReject }
                 >
                   <input {...getInputProps()} />
+                  { renderDragMessage( isDragActive, isDragReject ) }
 
-                  Jogar
                 </DropContainer>
               ) }
 
              </Dropzone>
+
              </div>
+          </label>
+
+          <label htmlFor="" className="area">
+              <div className="area--title"></div>
+              { !!uploadedFiles.length && <FileList files={ uploadedFiles } /> }
+            
           </label>
           
 
@@ -178,6 +255,7 @@ export default function AddAd () {
 
         </form>
       </div>
+
     </div>
   )
 }

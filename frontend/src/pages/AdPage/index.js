@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import useApi from '../../helpers/olxAPI'
+import useApi from '../../helpers/API'
 
 // eslint-disable-next-line no-unused-vars
 import { Slide } from 'react-slideshow-image'

@@ -11,6 +11,10 @@ module.exports =
         const { order = 'asc', limit = -1, flg_ativo = 1, idAd = null, others } = request.query;
         
         let data = [];
+        let info_user;
+        let info_state;
+        let info_category;
+        let gallery = [];
         let query = '';
         let query_others = '';
         
@@ -68,14 +72,14 @@ module.exports =
                 'select': 'imgAd', 
             });
             
-            if( gallery ) {
+            if( gallery.length ) {
 
                 query[0].gallery = gallery;
                 gallery.push({ 'imgAd': query[0].imgAd });
 
             }
 
-            if( others ) {
+            if( others.length ) {
 
                 query_others = await select({
                     'table': 'ads', 
@@ -116,8 +120,7 @@ module.exports =
 
     async create( request, response ) {
 
-        console.log( request );
-        const { idCategory, description, title, resume, price, flg_ativo = 1, token } = request.body;
+        const { idCategory, description, title, resume, value, flg_ativo = 1, token } = request.body;
         const info_user = await select({
             'table': 'users',
             'data': {
@@ -127,26 +130,22 @@ module.exports =
             'limit': 1
         })
 
-        console.log( 'Cat: '+ idCategory );
-        console.log( 'desc: '+ description );
-        console.log( 'title: '+ title );
-        console.log( 'res: '+ resume );
-        console.log( 'val: '+ price );
-        console.log( 'flg: '+ flg_ativo );
-        console.log( 'tk: '+ token );
-        console.log( 's: '+ info_user[0] );
+        const imgAd = 1;
         const idUser = info_user[0].idUser; 
-        console.log( 'Id: '+ idUser );
-        /*
-        const query = await insert({
-            'table': 'ads',
-            'data' : {
-                idUser, idCategory, description, title, resume, price, flg_ativo
-            }
-        })*/
+
+        const query = await connection('ads').insert({
+            idUser,
+            idCategory,
+            description,
+            title,
+            resume,
+            value,
+            imgAd,
+            flg_ativo,
+        });
 
         
-        //return response.json( query );
+        return response.json( query );
 
     },
 
@@ -155,7 +154,7 @@ module.exports =
         let{ idAd, originalname: name, size, key, location: url = "" } = req.file
 
         if( !url ) {
-            url = ( process.env.NODE_DEV == 'DEV' ? process.env.PATH_LOCAL + name : '' ) 
+            url = ( process.env.NODE_DEV == 'DEV' ? process.env.PATH_LOCAL + key : '' ) 
         }
 
         try{
