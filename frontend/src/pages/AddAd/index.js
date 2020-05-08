@@ -67,7 +67,7 @@ export default function AddAd () {
     console.log( 'Handle' )
     console.log( uploadedFiles )
 
-    await uploadedFiles.forEach( processUpload )
+    uploadedFiles.forEach( processUpload )
 
   };
 
