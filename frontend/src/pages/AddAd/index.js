@@ -44,11 +44,12 @@ export default function AddAd () {
     }
 
     getCategories()
+
   }, [])
   
-  function handleUpload(files) {
+  async function handleUpload(files) {
     
-    const fs = files.map( file => ({
+    const fs = await files.map( file => ({
       file,
       id: uniqueId(),
       name: file.name,
@@ -66,10 +67,40 @@ export default function AddAd () {
     console.log( 'Handle' )
     console.log( uploadedFiles )
 
-    uploadedFiles.forEach( processUpload )
+    await uploadedFiles.forEach( processUpload )
 
   };
 
+  async function processUpload( uploadedFile ) {
+
+    console.log( 'Proc' )
+    console.log( uploadedFiles )
+
+    const data = new FormData();
+
+    data.append( 'idAd', 0 )
+    data.append( 'file', uploadedFile.file, uploadedFile.name );
+
+    await axiosAPI.post( '/ad/gallery/register', data, {
+      onUploadProgress: e => {
+        const progress = parseInt( Math.round( ( e.loaded * 100 ) / e.total ) )
+        //console.log( progress )
+        updateFile( uploadedFile.id, { progress } )
+      }
+    }).then( response => {
+      updateFile( uploadedFile.id, {
+        uploaded: true,
+        id: response.data.id[0],
+        url: response.data.url
+      } ) 
+    }).catch( () => {
+      updateFile( uploadedFile.id, {
+        error: true
+      } ) 
+    });
+
+  }
+  
   function updateFile( id, data ) {
 
     console.log( 'Dentro' )
@@ -80,23 +111,11 @@ export default function AddAd () {
     } ))
   }
 
-  function processUpload( uploadedFile ) {
+  async function handleDelete(id) {
+    
+    axiosAPI.delete(`/ad/gallery/delete/${id}` )
 
-    console.log( 'Proc' )
-    console.log( uploadedFiles )
-
-    const data = new FormData();
-
-    data.append( 'file', uploadedFile.file, uploadedFile.name );
-
-    const json = axiosAPI.post( '/ad/gallery/register', data, {
-      onUploadProgress: e => {
-        const progress = parseInt( Math.round( ( e.loaded * 100 ) / e.total ) )
-        //console.log( progress )
-        updateFile( uploadedFile.id, { progress } )
-      }
-    } );
-
+    setUploadedFiles( uploadedFiles => uploadedFiles.filter( file => file.id != id ) )
   }
    
   //Submit form
@@ -220,7 +239,7 @@ export default function AddAd () {
           <label htmlFor="" className="area">
             <div className="area--title">Fotos do produto</div>
             <div className="area--input">
-              <Dropzone accept="image/*" onDropAccepted={ handleUpload }>
+              <Dropzone accept="image/*" onDropAccepted={handleUpload}>
               { ({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
                 <DropContainer 
                   { ...getRootProps() }
@@ -240,7 +259,7 @@ export default function AddAd () {
 
           <label htmlFor="" className="area">
               <div className="area--title"></div>
-              { !!uploadedFiles.length && <FileList files={ uploadedFiles } /> }
+              { !!uploadedFiles.length && <FileList files={uploadedFiles} onDelete={handleDelete} /> }
             
           </label>
           

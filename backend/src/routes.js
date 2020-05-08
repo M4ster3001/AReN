@@ -34,7 +34,7 @@ routes.get( '/ad/gallery', index );
 routes.get( '/ad/gallery/list', index );
 routes.post( '/ad/gallery/register', multer(multerConfig).single('file'), create );
 routes.put( '/ad/gallery/update', multer(multerConfig).single('file'), update );
-routes.delete( '/ad/gallery/delete', Delete );
+routes.delete( '/ad/gallery/delete/:id', Delete );
 
 //States
 routes.get( '/states', statesControllers.index );

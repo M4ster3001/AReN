@@ -7,12 +7,13 @@ import { MdCheckCircle, MdError, MdLink } from 'react-icons/md'
 import { Container, FileInfo, Preview } from './styles';
 
 
-export default function FileList( files ) {
+export default (props) => {
     console.log( 'Fora' )
-    console.log( files.files )
+    console.log( props.files )
+    console.log( props.onDelete )
     return (
         <Container>
-            { files.files.map( ( uploadFile, k ) =>
+            { props.files.map( ( uploadFile, k ) =>
                 <li key={ k }>
                     <FileInfo>
                         <Preview src={ uploadFile.preview }/>
@@ -20,7 +21,7 @@ export default function FileList( files ) {
                             <strong>{ uploadFile.name }</strong>
                             <span>{ uploadFile.readableSize } 
                             { uploadFile.url && 
-                                <button> Excluir </button> 
+                                <button onClick={ () => props.onDelete(uploadFile.id) }> Excluir </button> 
                             }
                             </span>
                         </div>

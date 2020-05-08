@@ -33,25 +33,31 @@ export async function create(req, res) {
     if( !url ) {
         url = ( process.env.NODE_DEV == 'DEV' ? process.env.PATH_LOCAL + key : '' ) 
     }
+    let data = [];
 
-    try{
-        resp = await connection('images_gallery').insert({
+    data = { url }
+    //console.log( data )
+    try {
+        await connection('images_gallery').insert({
             idAd,
             subtitle: name,
             size,
             key,
             url
-        });
+        }).then( resp => {
 
-        if( !resp ) {
-            return res.json({ error: 'Não foi possível salvar' })
-        }
+            data['id'] = resp;
+            return res.status( 200 ).json(data);
 
-    } catch( er ){
-        return res.json( er )
+        } ).catch( err => {
+            return res.status( 400 ).json(err);
+        } );
+
+    } catch( er ) {
+        console.log( er )
     }
 
-    return res.status( 200 ).json(resp);
+    
 }
 
 export async function update(request, response) {
@@ -84,36 +90,53 @@ export async function update(request, response) {
     return response.status( 200 ).json(resp);
 }
 
-export async function Delete(request, response) {
+export async function Delete(req, response) {
+    const { id } = req.params;
+    let query = [];
 
-    const { idImgGal } = request.body;
     try{
 
-        let query = await connection( TABLE ).where({ 'idImgGal': idImgGal }).first().catch( ( err ) => {
-            return response.json( err );
-        } );
+        if( id > 0 ) {
 
+            query[0] = await connection( TABLE ).where({ 'idImgGal': id }).first().catch( ( err ) => {
+                return response.json( err );
+            } );
+            
+        } else {
+
+            query = await connection( TABLE ).catch( ( err ) => {
+                return response.json( err );
+            } );
+            
+        }
+
+        let erase ;
         let delete_file = '';
-        if( process.env.STORAGE_TYPE === 's3' && query.key ){
 
-            delete_file = s3.deleteObject({
-                Bucket: process.env.BUCKET,
-                Key: query.key
-            }).promise()
+        query.forEach( async element => {
+            //console.log( element )
+            delete_file = '';
+            if( process.env.STORAGE_TYPE === 's3' && element.key ){
 
-        } else if( process.env.STORAGE_TYPE === 'local' && query.key ){
+                delete_file = s3.deleteObject({
+                    Bucket: process.env.BUCKET,
+                    Key: element.key
+                }).promise()
 
-            promisify( fs.unlink )( path.resolve( __dirname, '..', '..', 'tmp', 'uploads', query.key ) )
+            } else if( process.env.STORAGE_TYPE === 'local' && element.key ){
 
-        }
+                promisify( fs.unlink )( path.resolve( __dirname, '..', '..', 'tmp', 'uploads', element.key ) )
 
-        let erase = await connection( TABLE ).where({ 'idImgGal': idImgGal }).delete().catch( ( err ) => {
-            return response.json( err );
-        } );
+            }
 
-        if( !erase ) {
-            return response.status( 404 ).json({ error: 'Imagem não localizada' })
-        }
+            erase = await connection( TABLE ).where({ 'idImgGal': element.idImgGal }).delete();
+
+            if( !erase ) {
+                return response.status( 404 ).json({ error: 'Imagem não localizada' })
+            }
+
+        });
+        
 
     } catch( er ){
         return response.json( er )
