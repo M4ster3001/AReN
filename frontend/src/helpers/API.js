@@ -5,20 +5,18 @@ import qs from 'qs'
 const BaseAPI = 'http://localhost:3333'
 
 const apiFetchPost = async (endpoint, body) => {
+
+  console.log( body )
   if (!body.token) {
     const token = Cookies.get('token')
     if (token) {
       body.token = token
     }
   }
-
+  console.log( body )
   const res = await fetch(BaseAPI + endpoint, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify(body)
+    body
 
   })
 

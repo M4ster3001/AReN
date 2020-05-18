@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import Footer from './components/partials/Footer';
 import Routes from './Routes';
 
 const Page = (props) => {
+
   return (
     <BrowserRouter>
       <Template>

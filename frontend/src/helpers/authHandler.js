@@ -7,6 +7,7 @@ export const isLogged = () => {
 }
 
 export const doLogin = (token, flg_logado = false) => {
+
   if (flg_logado) {
     Cookies.set('token', token, { expires: 999 })
   } else {

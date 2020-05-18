@@ -14,23 +14,37 @@ module.exports = {
         if( !login_email || !login_password ) {
             return response.json({ error: 'Ocorreu um problema ao logar, tente novamente' });
         }
-        
+
         try { 
 
-            const login = await connection( TABLE ).where({ email: login_email }).select( 'idUser', 'password' ).first();
+            const login = await connection( TABLE ).
+            where({ email: login_email }).
+            select( 'idUser', 'password' ).
+            first().
+            then( async (resp) => {
+                
+                if( !resp ) {
 
-            if( !bCrypt.compareSync( login_password, login.password ) ) {
-                return response.json({ error: 'Login ou senha inválidos' });
-            }
+                    return response.json({ error: 'Usuário não localizado' });
 
-            const token = crypto.randomBytes( 12 ).toString( 'HEX' );
-            const query = await connection( TABLE ).where( 'idUser', login.idUser ).update({ token: token })
+                } else {
+                    if( !bCrypt.compareSync( login_password, resp.password ) ) {
+                        return response.json({ error: 'Login ou senha inválidos' });
+                    }
+        
+                    const token = crypto.randomBytes( 12 ).toString( 'HEX' );
+                    const query = await connection( TABLE ).where( 'idUser', resp.idUser ).update({ token: token })
+                    
+                    if( !query ) {
+                        return response.json({ error: 'Ocorreu um erro no acesso código 3' });
+                    }
+        
+                    return response.json({ token: token });
+                }
 
-            if( !query ) {
-                return response.json({ error: 'Ocorreu um erro no acesso código 3' });
-            }
-
-            return response.json({ token: token });
+            } ).catch( e => {
+                return response.json({ error: e })
+            } );
 
         } catch( er ) {
             return response.json( er );

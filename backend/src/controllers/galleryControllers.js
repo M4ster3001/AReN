@@ -15,7 +15,7 @@ export async function index(request, response) {
 
     const { order = 'asc', limit = -1, idAd = null } = request.query;
     let query = '';
-
+    
     if( !idAd ) {
         query = await connection(TABLE).select('*').orderBy('createdAt', order).limit(limit);
     } else {
@@ -96,7 +96,7 @@ export async function Delete(req, response) {
 
     try{
 
-        if( id > 0 ) {
+        if( id > 0 && id != ':id' ) {
 
             query[0] = await connection( TABLE ).where({ 'idImgGal': id }).first().catch( ( err ) => {
                 return response.json( err );
@@ -113,29 +113,31 @@ export async function Delete(req, response) {
         let erase ;
         let delete_file = '';
 
-        query.forEach( async element => {
-            //console.log( element )
-            delete_file = '';
-            if( process.env.STORAGE_TYPE === 's3' && element.key ){
+        if( query ) {
+            query.forEach( async element => {
+                
+                delete_file = '';
+                if( process.env.STORAGE_TYPE === 's3' && element.key ){
 
-                delete_file = s3.deleteObject({
-                    Bucket: process.env.BUCKET,
-                    Key: element.key
-                }).promise()
+                    delete_file = s3.deleteObject({
+                        Bucket: process.env.BUCKET,
+                        Key: element.key
+                    }).promise()
 
-            } else if( process.env.STORAGE_TYPE === 'local' && element.key ){
+                } else if( process.env.STORAGE_TYPE === 'local' && element.key ){
 
-                promisify( fs.unlink )( path.resolve( __dirname, '..', '..', 'tmp', 'uploads', element.key ) )
+                    promisify( fs.unlink )( path.resolve( __dirname, '..', '..', 'tmp', 'uploads', element.key ) )
 
-            }
+                }
 
-            erase = await connection( TABLE ).where({ 'idImgGal': element.idImgGal }).delete();
+                erase = await connection( TABLE ).where({ 'idImgGal': element.idImgGal }).delete();
 
-            if( !erase ) {
-                return response.status( 404 ).json({ error: 'Imagem não localizada' })
-            }
+                if( !erase ) {
+                    return response.status( 404 ).json({ error: 'Imagem não localizada' })
+                }
 
-        });
+            });
+        }
         
 
     } catch( er ){

@@ -41,6 +41,23 @@ export const DropContainer = styled.div.attrs({
   ${ props => props.isDragReject && dragReject };
 `;
 
+export const DropContainerThumb = styled.div.attrs({
+    className: 'dropzone-thumbnail-input'
+})`
+  border: 1px dashed #95A5A6;
+  border-radius: 8px;
+  height: 40px;
+  color: #333;
+  padding: 0 24px;
+  line-height: 40px;
+  cursor: pointer;
+
+  transition: height 0.2s ease;
+
+  ${ props => props.isDragActive && dragActive };
+  ${ props => props.isDragReject && dragReject };
+`;
+
 const messageColors = {
     default: '#999',
     error: '#e57878',

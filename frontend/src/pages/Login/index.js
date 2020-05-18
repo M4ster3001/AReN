@@ -22,10 +22,13 @@ export default function Login () {
     setError('')
 
     try {
+
       const json = await api.login(email, password)
-      if (json.error) {
+
+      if ( json.error ) {
         setError(json.error)
       } else {
+
         doLogin(json.token, flg_logado)
         window.location.href = '/'
       }

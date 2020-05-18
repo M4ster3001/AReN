@@ -120,7 +120,8 @@ module.exports =
 
     async create( request, response ) {
 
-        const { idCategory, description, title, resume, value, flg_ativo = 1, token } = request.body;
+        const { idCategory, description, title, resume, value, flg_ativo = 1, token } = request;
+
         const info_user = await select({
             'table': 'users',
             'data': {
@@ -131,20 +132,25 @@ module.exports =
         })
 
         const imgAd = 1;
-        const idUser = info_user[0].idUser; 
+        if( info_user[0] ) {
 
-        const query = await connection('ads').insert({
-            idUser,
-            idCategory,
-            description,
-            title,
-            resume,
-            value,
-            imgAd,
-            flg_ativo,
-        });
+            const idUser = info_user[0].idUser; 
 
-        
+            const query = await connection('ads').insert({
+                idUser,
+                idCategory,
+                description,
+                title,
+                resume,
+                value,
+                imgAd,
+                flg_ativo,
+            });
+
+        } else {
+            return response.json({ error: 'Usuário não localizado' })
+        }
+
         return response.json( query );
 
     },

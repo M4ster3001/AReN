@@ -15,6 +15,7 @@ import FileList from '../../components/partials/FileList'
 
 import './styles.css'
 import { DropContainer, Container, Content, UploadMessage, Teste } from './styled'
+import fileSize from 'filesize'
 
 export default function AddAd () {
   const api = useAPI()
@@ -43,11 +44,24 @@ export default function AddAd () {
       setCategoryList(slist)
     }
 
-    getCategories()
+    const getFiles = async() => {
+      const fList = await api.getFilesList()
+      setUploadedFiles( uploadedFiles => fList.data.map( file =>({
+        id: file.idImgGal,
+        name: file.subtitle,
+        readablesize: fileSize( file.size ),
+        preview: file.url,
+        uploaded: true,
+        url: file.url
+      }) ) 
+      );
+    }
 
-  }, [])
+    getCategories()
+    
+  }, []);
   
-  async function handleUpload(files) {
+  const handleUpload = async (files) => {
     
     const fs = await files.map( file => ({
       file,
@@ -64,17 +78,11 @@ export default function AddAd () {
 
     setUploadedFiles( uploadedFiles => ([ ...uploadedFiles,  ...fs ]) )
 
-    console.log( 'Handle' )
-    console.log( uploadedFiles )
-
-    uploadedFiles.forEach( processUpload )
+    //uploadedFiles.forEach( processUpload )
 
   };
 
   async function processUpload( uploadedFile ) {
-
-    console.log( 'Proc' )
-    console.log( uploadedFiles )
 
     const data = new FormData();
 
@@ -103,9 +111,6 @@ export default function AddAd () {
   
   function updateFile( id, data ) {
 
-    console.log( 'Dentro' )
-    console.log( uploadedFiles )
-
     setUploadedFiles( uploadedFiles => uploadedFiles.map( uploadedFile => {
       return id === uploadedFile.id ? { ...uploadedFile, ...data } : uploadedFile ; 
     } ))
@@ -125,6 +130,8 @@ export default function AddAd () {
     setError( '' );
     let errors = [];
 
+    uploadedFiles.forEach( processUpload )
+    /*
     if( !title.trim() ) {
       errors.push( 'Sem título' );
     }
@@ -153,6 +160,8 @@ export default function AddAd () {
 
         const json = await api.AddAd( fData );
         if( !json.error ) {
+
+          uploadedFiles( uploadedFiles => this.forEach(file => URL.revokeObjectURL( file.preview ) ) );
           //history.push(`/ad/view/${json.id}`);
           return;
         }
@@ -161,7 +170,7 @@ export default function AddAd () {
       setError( errors.join("\n") );
     }
 
-    //setDisabled( false );
+    //setDisabled( false );*/
   }
 
   const priceMask = createNumberMask({
