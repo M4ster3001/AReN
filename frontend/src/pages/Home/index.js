@@ -15,35 +15,30 @@ export default function Login () {
   const [categories, setCategories] = useState([])
   const [adList, setAdList] = useState([])
 
+  const getStates = async () => {
+    const sList = await api.getStates()
+    setStateList(sList)
+  }
+
+  const getCategories = async () => {
+    const sList = await api.getCategories()
+    setCategories(sList)
+  }
+  const getRecentAds = async () => {
+    const json = await api.getAds({
+      sort: 'desc',
+      limit: 8,
+      flg_ativo: 1
+    })
+    setAdList(json)
+  }
+
   useEffect(() => {
-    const getStates = async () => {
-      const sList = await api.getStates()
-      setStateList(sList)
+    async function LoadData() {
+      await Promise.all([getStates(), getCategories(), getRecentAds()])
     }
-
-    getStates()
-  }, [])
-
-  useEffect(() => {
-    const getCategories = async () => {
-      const sList = await api.getCategories()
-      setCategories(sList)
-    }
-
-    getCategories()
-  }, [])
-
-  useEffect(() => {
-    const getRecentAds = async () => {
-      const json = await api.getAds({
-        sort: 'desc',
-        limit: 8,
-        flg_ativo: 1
-      })
-      setAdList(json)
-    }
-
-    getRecentAds()
+    
+    LoadData()
   }, [])
 
   return (
