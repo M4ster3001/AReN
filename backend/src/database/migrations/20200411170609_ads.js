@@ -1,26 +1,20 @@
+exports.up = function (knex) {
+  return knex.schema.createTable('ads', function (table) {
+    table.increments('idAd');
+    table.integer('idUser').notNullable();
+    table.integer('idCategory').notNullable();
+    table.string('description').notNullable();
+    table.string('title').notNullable();
+    table.string('resume').notNullable();
+    table.string('imgAd').notNullable();
+    table.double('value');
+    table.integer('flg_ativo');
 
-exports.up = function(knex) {
-
-    return knex.schema.createTable( 'ads', function( table ){
-
-        table.increments( 'idAd' );
-        table.integer( 'idUser' ).notNullable();
-        table.integer( 'idCategory' ).notNullable();
-        table.string( 'description' ).notNullable();
-        table.string( 'title' ).notNullable();
-        table.string( 'resume' ).notNullable();
-        table.string( 'imgAd' ).notNullable();
-        table.double( 'value' );
-        table.integer( 'flg_ativo' );
-
-        table.timestamp('createdAt').defaultTo( knex.fn.now() );
-        table.timestamp('updatedAt');
-
-    } );
-
-  
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt');
+  });
 };
 
-exports.down = function(knex) {
-  return knex.schema.dropTable( 'ads' );
+exports.down = function (knex) {
+  return knex.schema.dropTable('ads');
 };

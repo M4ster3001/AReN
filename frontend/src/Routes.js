@@ -15,7 +15,7 @@ import NotFound from './pages/NotFound';
 export default () => {
     return (
 
-        <Switch>
+         <Switch>
             <RouteHandler exact path="/" component={ Home } />               
             <RouteHandler exact path="/login" component={ Login } />
             <RouteHandler exact path="/register" component={ Registrar } />

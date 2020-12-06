@@ -30,6 +30,7 @@ export default function Register () {
   }, [])
 
   async function handleRegister (e) {
+
     e.preventDefault()
     setDisabled(true)
     setError('')
@@ -41,13 +42,16 @@ export default function Register () {
     }
 
     try {
-      const json = await api.postRegister(name, stateLoc, email, password)
+
+      const json = await api.postRegister( name, stateLoc, email, password )
+
       if (json.error) {
         setError(json.error)
       } else {
         doLogin(json.token)
         window.location.href = '/'
       }
+
     } catch (er) {
       alert('Erro: ' + er)
     }

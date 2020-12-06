@@ -12,7 +12,7 @@ export default function Header () {
     doLogout()
     window.location.href = '/'
   }
-
+  
   return (
     <HeaderArea>
       <div className="container">

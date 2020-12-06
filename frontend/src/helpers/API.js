@@ -13,11 +13,11 @@ const apiFetchPost = async (endpoint, body) => {
       body.token = token
     }
   }
+  
   console.log( body )
   const res = await fetch(BaseAPI + endpoint, {
     method: 'POST',
     body
-
   })
 
   const json = await res.json()

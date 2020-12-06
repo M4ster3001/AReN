@@ -20,6 +20,7 @@ import fileSize from 'filesize'
 export default function AddAd () {
   const api = useAPI()
 
+  const [ idAd, setIdAd ] = useState( 0 );
   const [ title, setTitle ] = useState( '' );
   const [ category, setCategory ] = useState( '' );
   const [ price, setPrice ] = useState( '' );
@@ -82,11 +83,11 @@ export default function AddAd () {
 
   };
 
-  async function processUpload( uploadedFile ) {
+  async function processUpload( teste, uploadedFile ) {
 
     const data = new FormData();
 
-    data.append( 'idAd', 0 )
+    data.append( 'idAd', idAd )
     data.append( 'file', uploadedFile.file, uploadedFile.name );
 
     await axiosAPI.post( '/ad/gallery/register', data, {
@@ -130,8 +131,7 @@ export default function AddAd () {
     setError( '' );
     let errors = [];
 
-    uploadedFiles.forEach( processUpload )
-    /*
+
     if( !title.trim() ) {
       errors.push( 'Sem título' );
     }
@@ -148,29 +148,26 @@ export default function AddAd () {
         fData.append( 'resume', resume )
         fData.append( 'description', description )
         fData.append( 'price', price )
-        fData.append( 'images', images )
-
-        if( fileField.current.files.length > 0 ) {
-
-          for( let i = 0; i<fileField.current.files.length; i++ ){
-            fData.append( 'files', fileField.current.files[i] )
-          }
-
-        }
 
         const json = await api.AddAd( fData );
         if( !json.error ) {
+          
+          setIdAd( json.id )
+
+          uploadedFiles.forEach( processUpload )
 
           uploadedFiles( uploadedFiles => this.forEach(file => URL.revokeObjectURL( file.preview ) ) );
           //history.push(`/ad/view/${json.id}`);
           return;
+        } else {
+          setError( json.error );
         }
 
     } else {
       setError( errors.join("\n") );
     }
 
-    //setDisabled( false );*/
+    //setDisabled( false );
   }
 
   const priceMask = createNumberMask({
